@@ -6,14 +6,110 @@
         <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
         <meta name="mobile-web-app-capable" content="yes">
         <meta name="apple-mobile-web-app-capable" content="yes">
-        <link rel="stylesheet" href="css/leaflet.css">
-        <link rel="stylesheet" href="css/L.Control.Layers.Tree.css">
-        <link rel="stylesheet" href="css/qgis2web.css">
-        <link rel="stylesheet" href="css/fontawesome-all.min.css">
-        <link rel="stylesheet" href="css/filter.css">
-<link rel="stylesheet" href="css/nouislider.min.css">
-        <link rel="stylesheet" href="css/leaflet.photon.css">
+    <link rel="stylesheet" href="css/leaflet.css">
+    <link rel="stylesheet" href="css/L.Control.Layers.Tree.css">
+    <link rel="stylesheet" href="css/qgis2web.css">
+    <link rel="stylesheet" href="css/fontawesome-all.min.css">
+    <link rel="stylesheet" href="css/filter.css">
+    <link rel="stylesheet" href="css/nouislider.min.css">
+    <link rel="stylesheet" href="css/leaflet.photon.css">
+    <!-- Leaflet.markercluster plugin CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
         <style>
+        /* Add top padding to the Period (Century) filter section title */
+        #menu .period-century-label {
+            padding-top: 10px;
+            padding-left: 12px;
+    /* End of custom styles */
+        #menu .slider {
+            padding-left: 12px;
+            padding-top: 5px;
+            padding-right: 12px;
+        }
+        .clear-filter-btn {
+            display: block;
+            margin: 8px 0 0 12px;
+            padding: 1px 7px;
+            font-size: 5.6px;
+            font-weight: 600;
+            color: #d32f2f;
+            background: transparent;
+            border: 1px solid #d32f2f;
+            border-radius: 4px;
+            cursor: pointer;
+            text-align: left;
+            outline: none;
+            transition: background 0.2s, color 0.2s, border 0.2s;
+        }
+        
+        .slider {
+            padding-top: 5px;
+        }
+        /* Classic Material style for noUiSlider with maroon bar */
+        .noUi-target {
+            background: #fafafa;
+            border-radius: 6px;
+            border: 1.5px solid #d3d3d3;
+            box-shadow: 0 2px 8px rgba(128,0,0,0.08);
+            margin-top: 8px;
+        }
+        .noUi-base {
+            background: transparent;
+            height: 6px;
+            border-radius: 6px;
+        }
+        .noUi-connect {
+            background: maroon;
+            box-shadow: 0 1px 6px rgba(128,0,0,0.18);
+            height: 6px;
+            border-radius: 6px;
+            opacity: 1;
+            margin-top: 0;
+        }
+        .noUi-horizontal .noUi-handle {
+            border-radius: 50%;
+            background: #fff;
+            border: 2px solid maroon;
+            box-shadow: 0 2px 8px rgba(128,0,0,0.18);
+            width: 18px;
+            height: 18px;
+            top: -6px;
+        }
+        .noUi-handle:before, .noUi-handle:after {
+            display: none;
+        }
+        }
+        .clear-filter-btn:hover {
+            background: #ffeaea;
+            color: #b71c1c;
+            border-color: #b71c1c;
+        }
+        /* Style for filter dropdowns */
+        .filterselect select {
+            width: 95%;
+            padding: 6px 8px;
+            border: 1px solid #bbb;
+            border-radius: 4px;
+            background: #f9f9f9;
+            font-size: 1em;
+            margin-bottom: 6px;
+        }
+        .filterselect select:focus {
+            outline: 2px solid #4363d8;
+            background: #fff;
+        }
+        .filterlabel {
+            font-weight: bold;
+            margin-bottom: 2px;
+            margin-top: 4px;
+            color: maroon;
+            text-align: left;
+            display: block;
+        }
+        .filterselect {
+            margin-bottom: 12px;
+        }
         html, body, #map {
             width: 100%;
             height: 100%;
@@ -24,27 +120,30 @@
         <title>Herostones of United Bengaluru District</title>
     </head>
     <body>
-        <div id="map">
-        </div>
-        <script src="js/qgis2web_expressions.js"></script>
-        <script src="js/leaflet.js"></script>
-        <script src="js/L.Control.Layers.Tree.min.js"></script>
-        <script src="js/leaflet.rotatedMarker.js"></script>
-        <script src="js/leaflet.pattern.js"></script>
-        <script src="js/leaflet-hash.js"></script>
-        <script src="js/Autolinker.min.js"></script>
-        <script src="js/rbush.min.js"></script>
-        <script src="js/labelgun.min.js"></script>
-        <script src="js/labels.js"></script>
-        <script src="js/leaflet.photon.js"></script>
-        <script src="js/tailDT.js"></script>
-<script src="js/nouislider.min.js"></script>
-<script src="js/wNumb.js"></script>
-        <script src="data/RamanagaraDistrict_1.js"></script>
-        <script src="data/BengaluruRuralDistrict_2.js"></script>
-        <script src="data/BengaluruUrbanDistrict_3.js"></script>
-        <script src="data/MandyaDistrict_4.js"></script>
-        <script src="data/HeroStonesofUnitedBengaluruDistrict_5.js"></script>
+    <div id="map"></div>
+    <!-- JS Dependencies -->
+    <script src="js/qgis2web_expressions.js"></script>
+    <script src="js/leaflet.js"></script>
+    <!-- Leaflet.markercluster plugin JS -->
+    <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+    <script src="js/L.Control.Layers.Tree.min.js"></script>
+    <script src="js/leaflet.rotatedMarker.js"></script>
+    <script src="js/leaflet.pattern.js"></script>
+    <script src="js/leaflet-hash.js"></script>
+    <script src="js/Autolinker.min.js"></script>
+    <script src="js/rbush.min.js"></script>
+    <script src="js/labelgun.min.js"></script>
+    <script src="js/labels.js"></script>
+    <script src="js/leaflet.photon.js"></script>
+    <script src="js/tailDT.js"></script>
+    <script src="js/nouislider.min.js"></script>
+    <script src="js/wNumb.js"></script>
+    <!-- Data Files -->
+    <script src="data/RamanagaraDistrict_1.js"></script>
+    <script src="data/BengaluruRuralDistrict_2.js"></script>
+    <script src="data/BengaluruUrbanDistrict_3.js"></script>
+    <script src="data/MandyaDistrict_4.js"></script>
+    <script src="data/HeroStonesofUnitedBengaluruDistrict_5.js"></script>
         <script>
         var highlightLayer;
         function highlightFeature(e) {
@@ -446,6 +545,8 @@
         map.createPane('pane_HeroStonesofUnitedBengaluruDistrict_5');
         map.getPane('pane_HeroStonesofUnitedBengaluruDistrict_5').style.zIndex = 405;
         map.getPane('pane_HeroStonesofUnitedBengaluruDistrict_5').style['mix-blend-mode'] = 'normal';
+        // --- MarkerClusterGroup for Herostones ---
+        var markerClusterGroup = L.markerClusterGroup();
         var layer_HeroStonesofUnitedBengaluruDistrict_5 = new L.geoJson(json_HeroStonesofUnitedBengaluruDistrict_5, {
             attribution: '',
             interactive: true,
@@ -461,8 +562,9 @@
                 return L.circleMarker(latlng, style_HeroStonesofUnitedBengaluruDistrict_5_0(feature));
             },
         });
-        bounds_group.addLayer(layer_HeroStonesofUnitedBengaluruDistrict_5);
-        map.addLayer(layer_HeroStonesofUnitedBengaluruDistrict_5);
+        markerClusterGroup.addLayer(layer_HeroStonesofUnitedBengaluruDistrict_5);
+        bounds_group.addLayer(markerClusterGroup);
+        map.addLayer(markerClusterGroup);
         const url = {"Nominatim": "https://nominatim.openstreetmap.org/search?format=geojson&addressdetails=1&",
         "BAN": "https://api-adresse.data.gouv.fr/search/?"}
         var photonControl = L.control.photon({
@@ -555,108 +657,103 @@
         col1.appendChild(mapDiv)
         var Filters = {"Period (Century)": "int","With or Without Inscription": "str","District": "str","Type of Herostone": "str","Conservation Status": "str","Script of the Inscription": "str"};
         function filterFunc() {
-          map.eachLayer(function(lyr){
-          if ("options" in lyr && "dataVar" in lyr["options"]){
-            features = this[lyr["options"]["dataVar"]].features.slice(0);
-            try{
-              for (key in Filters){
-                keyS = key.replace(/[^a-zA-Z0-9_]/g, "")
-                if (Filters[key] == "str" || Filters[key] == "bool"){
-                  var selection = [];
-                  var options = document.getElementById("sel_" + keyS).options
-                  for (var i=0; i < options.length; i++) {
-                    if (options[i].selected) selection.push(options[i].value);
-                  }
-                    try{
-                      if (key in features[0].properties){
-                        for (i = features.length - 1;
-                          i >= 0; --i){
-                          if (selection.indexOf(
-                          features[i].properties[key])<0
-                          && selection.length>0) {
-                          features.splice(i,1);
-                          }
-                        }
-                      }
-                    } catch(err){
-                  }
-                }
-                if (Filters[key] == "int"){
-                  sliderVals =  document.getElementById(
-                    "div_" + keyS).noUiSlider.get();
-                  try{
-                    if (key in features[0].properties){
-                    for (i = features.length - 1; i >= 0; --i){
-                      if (parseInt(features[i].properties[key])
-                          < sliderVals[0]
-                          || parseInt(features[i].properties[key])
-                          > sliderVals[1]){
-                            features.splice(i,1);
-                          }
-                        }
-                      }
-                    } catch(err){
+                    // Custom: handle marker clustering for Herostones layer
+                    if (typeof markerClusterGroup !== 'undefined' && typeof layer_HeroStonesofUnitedBengaluruDistrict_5 !== 'undefined') {
+                        markerClusterGroup.clearLayers();
+                        var features = json_HeroStonesofUnitedBengaluruDistrict_5.features.slice(0);
+                        try {
+                            for (key in Filters) {
+                                keyS = key.replace(/[^a-zA-Z0-9_]/g, "");
+                                if (Filters[key] == "str" || Filters[key] == "bool") {
+                                    var selection = [];
+                                    var options = document.getElementById("sel_" + keyS).options;
+                                    for (var i = 0; i < options.length; i++) {
+                                        if (options[i].selected) selection.push(options[i].value);
+                                    }
+                                    try {
+                                        if (key in features[0].properties) {
+                                            for (i = features.length - 1; i >= 0; --i) {
+                                                if (selection.indexOf(features[i].properties[key]) < 0 && selection.length > 0) {
+                                                    features.splice(i, 1);
+                                                }
+                                            }
+                                        }
+                                    } catch (err) {}
+                                }
+                                if (Filters[key] == "int") {
+                                    sliderVals = document.getElementById("div_" + keyS).noUiSlider.get();
+                                    try {
+                                        if (key in features[0].properties) {
+                                            for (i = features.length - 1; i >= 0; --i) {
+                                                if (parseInt(features[i].properties[key]) < sliderVals[0] || parseInt(features[i].properties[key]) > sliderVals[1]) {
+                                                    features.splice(i, 1);
+                                                }
+                                            }
+                                        }
+                                    } catch (err) {}
+                                }
+                                if (Filters[key] == "real") {
+                                    sliderVals = document.getElementById("div_" + keyS).noUiSlider.get();
+                                    try {
+                                        if (key in features[0].properties) {
+                                            for (i = features.length - 1; i >= 0; --i) {
+                                                if (features[i].properties[key] < sliderVals[0] || features[i].properties[key] > sliderVals[1]) {
+                                                    features.splice(i, 1);
+                                                }
+                                            }
+                                        }
+                                    } catch (err) {}
+                                }
+                                if (Filters[key] == "date" || Filters[key] == "datetime" || Filters[key] == "time") {
+                                    try {
+                                        if (key in features[0].properties) {
+                                            HTMLkey = key.replace(/[&\/\\#,+()$~%.'":*?<>{} ]/g, '');
+                                            startdate = document.getElementById("dat_" + HTMLkey + "_date1").value.replace(" ", "T");
+                                            enddate = document.getElementById("dat_" + HTMLkey + "_date2").value.replace(" ", "T");
+                                            for (i = features.length - 1; i >= 0; --i) {
+                                                if (features[i].properties[key] < startdate || features[i].properties[key] > enddate) {
+                                                    features.splice(i, 1);
+                                                }
+                                            }
+                                        }
+                                    } catch (err) {}
+                                }
+                            }
+                        } catch (err) {}
+                        // Re-create filtered Herostones layer and add to cluster group
+                        var filteredLayer = new L.geoJson({type: 'FeatureCollection', features: features}, {
+                            attribution: '',
+                            interactive: true,
+                            dataVar: 'json_HeroStonesofUnitedBengaluruDistrict_5',
+                            layerName: 'layer_HeroStonesofUnitedBengaluruDistrict_5',
+                            pane: 'pane_HeroStonesofUnitedBengaluruDistrict_5',
+                            onEachFeature: pop_HeroStonesofUnitedBengaluruDistrict_5,
+                            pointToLayer: function (feature, latlng) {
+                                var context = {
+                                    feature: feature,
+                                    variables: {}
+                                };
+                                return L.circleMarker(latlng, style_HeroStonesofUnitedBengaluruDistrict_5_0(feature));
+                            },
+                        });
+                        markerClusterGroup.addLayer(filteredLayer);
                     }
-                  }
-                if (Filters[key] == "real"){
-                  sliderVals =  document.getElementById(
-                    "div_" + keyS).noUiSlider.get();
-                  try{
-                    if (key in features[0].properties){
-                    for (i = features.length - 1; i >= 0; --i){
-                      if (features[i].properties[key]
-                          < sliderVals[0]
-                          || features[i].properties[key]
-                          > sliderVals[1]){
-                            features.splice(i,1);
-                          }
-                        }
-                      }
-                    } catch(err){
-                    }
-                  }
-                if (Filters[key] == "date"
-                  || Filters[key] == "datetime"
-                  || Filters[key] == "time"){
-                  try{
-                    if (key in features[0].properties){
-                      HTMLkey = key.replace(/[&\/\\#,+()$~%.'":*?<>{} ]/g, '');
-                      startdate = document.getElementById("dat_" +
-                        HTMLkey + "_date1").value.replace(" ", "T");
-                      enddate = document.getElementById("dat_" +
-                        HTMLkey + "_date2").value.replace(" ", "T");
-                      for (i = features.length - 1; i >= 0; --i){
-                        if (features[i].properties[key] < startdate
-                          || features[i].properties[key] > enddate){
-                          features.splice(i,1);
-                        }
-                      }
-                    }
-                  } catch(err){
-                  }
-                }
-              }
-            } catch(err){
-            }
-          this[lyr["options"]["layerName"]].clearLayers();
-          this[lyr["options"]["layerName"]].addData(features);
-          }
-          })
+                    // ...existing code for other layers...
         }
             document.getElementById("menu").appendChild(
                 document.createElement("div"));
             var div_PeriodCentury = document.createElement("div");
             div_PeriodCentury.id = "div_PeriodCentury";
             div_PeriodCentury.className = "slider";
-            document.getElementById("menu").appendChild(div_PeriodCentury);
             var lab_PeriodCentury = document.createElement('div');
             lab_PeriodCentury.innerHTML  = 'Period (Century): <span id="val_PeriodCentury"></span>';
-            lab_PeriodCentury.className = 'filterlabel';
+            lab_PeriodCentury.className = 'filterlabel period-century-label';
             document.getElementById("menu").appendChild(lab_PeriodCentury);
-            var reset_PeriodCentury = document.createElement('div');
-            reset_PeriodCentury.innerHTML = 'clear filter';
-            reset_PeriodCentury.className = 'filterlabel';
-            lab_PeriodCentury.className = 'filterlabel';
+            document.getElementById("menu").appendChild(div_PeriodCentury);
+            var reset_PeriodCentury = document.createElement('button');
+            reset_PeriodCentury.type = 'button';
+            reset_PeriodCentury.textContent = 'Clear Filter';
+            reset_PeriodCentury.className = 'clear-filter-btn';
             reset_PeriodCentury.onclick = function() {
                 sel_PeriodCentury.noUiSlider.reset();
             };
@@ -690,22 +787,22 @@
             div_WithorWithoutInscription.className= "filterselect";
             document.getElementById("menu").appendChild(div_WithorWithoutInscription);
             sel_WithorWithoutInscription = document.createElement('select');
-            sel_WithorWithoutInscription.multiple = true;
-            sel_WithorWithoutInscription.size = 2;
+            sel_WithorWithoutInscription.setAttribute('multiple', 'multiple');
             sel_WithorWithoutInscription.id = "sel_WithorWithoutInscription";
             var WithorWithoutInscription_options_str = "<option value='' unselected></option>";
             sel_WithorWithoutInscription.onchange = function(){filterFunc()};
             WithorWithoutInscription_options_str  += '<option value="With Inscription">With Inscription</option>';
             WithorWithoutInscription_options_str  += '<option value="Without Inscription">Without Inscription</option>';
             sel_WithorWithoutInscription.innerHTML = WithorWithoutInscription_options_str;
-            div_WithorWithoutInscription.appendChild(sel_WithorWithoutInscription);
             var lab_WithorWithoutInscription = document.createElement('div');
             lab_WithorWithoutInscription.innerHTML = 'With or Without Inscription';
             lab_WithorWithoutInscription.className = 'filterlabel';
             div_WithorWithoutInscription.appendChild(lab_WithorWithoutInscription);
-            var reset_WithorWithoutInscription = document.createElement('div');
-            reset_WithorWithoutInscription.innerHTML = 'clear filter';
-            reset_WithorWithoutInscription.className = 'filterlabel';
+            div_WithorWithoutInscription.appendChild(sel_WithorWithoutInscription);
+            var reset_WithorWithoutInscription = document.createElement('button');
+            reset_WithorWithoutInscription.type = 'button';
+            reset_WithorWithoutInscription.textContent = 'Clear Filter';
+            reset_WithorWithoutInscription.className = 'clear-filter-btn';
             reset_WithorWithoutInscription.onclick = function() {
                 var options = document.getElementById("sel_WithorWithoutInscription").options;
                 for (var i=0; i < options.length; i++) {
@@ -721,8 +818,7 @@
             div_District.className= "filterselect";
             document.getElementById("menu").appendChild(div_District);
             sel_District = document.createElement('select');
-            sel_District.multiple = true;
-            sel_District.size = 5;
+            sel_District.setAttribute('multiple', 'multiple');
             sel_District.id = "sel_District";
             var District_options_str = "<option value='' unselected></option>";
             sel_District.onchange = function(){filterFunc()};
@@ -732,14 +828,15 @@
             District_options_str  += '<option value="Mandya">Mandya</option>';
             District_options_str  += '<option value="Ramanagara">Ramanagara</option>';
             sel_District.innerHTML = District_options_str;
-            div_District.appendChild(sel_District);
             var lab_District = document.createElement('div');
             lab_District.innerHTML = 'District';
             lab_District.className = 'filterlabel';
             div_District.appendChild(lab_District);
-            var reset_District = document.createElement('div');
-            reset_District.innerHTML = 'clear filter';
-            reset_District.className = 'filterlabel';
+            div_District.appendChild(sel_District);
+            var reset_District = document.createElement('button');
+            reset_District.type = 'button';
+            reset_District.textContent = 'Clear Filter';
+            reset_District.className = 'clear-filter-btn';
             reset_District.onclick = function() {
                 var options = document.getElementById("sel_District").options;
                 for (var i=0; i < options.length; i++) {
@@ -755,8 +852,7 @@
             div_TypeofHerostone.className= "filterselect";
             document.getElementById("menu").appendChild(div_TypeofHerostone);
             sel_TypeofHerostone = document.createElement('select');
-            sel_TypeofHerostone.multiple = true;
-            sel_TypeofHerostone.size = 10;
+            sel_TypeofHerostone.setAttribute('multiple', 'multiple');
             sel_TypeofHerostone.id = "sel_TypeofHerostone";
             var TypeofHerostone_options_str = "<option value='' unselected></option>";
             sel_TypeofHerostone.onchange = function(){filterFunc()};
@@ -791,14 +887,15 @@
             TypeofHerostone_options_str  += '<option value="Veera Masti and Turugol">Veera Masti and Turugol</option>';
             TypeofHerostone_options_str  += '<option value="Velevali">Velevali</option>';
             sel_TypeofHerostone.innerHTML = TypeofHerostone_options_str;
-            div_TypeofHerostone.appendChild(sel_TypeofHerostone);
             var lab_TypeofHerostone = document.createElement('div');
             lab_TypeofHerostone.innerHTML = 'Type of Herostone';
             lab_TypeofHerostone.className = 'filterlabel';
             div_TypeofHerostone.appendChild(lab_TypeofHerostone);
-            var reset_TypeofHerostone = document.createElement('div');
-            reset_TypeofHerostone.innerHTML = 'clear filter';
-            reset_TypeofHerostone.className = 'filterlabel';
+            div_TypeofHerostone.appendChild(sel_TypeofHerostone);
+            var reset_TypeofHerostone = document.createElement('button');
+            reset_TypeofHerostone.type = 'button';
+            reset_TypeofHerostone.textContent = 'Clear Filter';
+            reset_TypeofHerostone.className = 'clear-filter-btn';
             reset_TypeofHerostone.onclick = function() {
                 var options = document.getElementById("sel_TypeofHerostone").options;
                 for (var i=0; i < options.length; i++) {
@@ -814,8 +911,7 @@
             div_ConservationStatus.className= "filterselect";
             document.getElementById("menu").appendChild(div_ConservationStatus);
             sel_ConservationStatus = document.createElement('select');
-            sel_ConservationStatus.multiple = true;
-            sel_ConservationStatus.size = 8;
+            sel_ConservationStatus.setAttribute('multiple', 'multiple');
             sel_ConservationStatus.id = "sel_ConservationStatus";
             var ConservationStatus_options_str = "<option value='' unselected></option>";
             sel_ConservationStatus.onchange = function(){filterFunc()};
@@ -828,14 +924,15 @@
             ConservationStatus_options_str  += '<option value="Unknown">Unknown</option>';
             ConservationStatus_options_str  += '<option value="Yet to Veriefy">Yet to Veriefy</option>';
             sel_ConservationStatus.innerHTML = ConservationStatus_options_str;
-            div_ConservationStatus.appendChild(sel_ConservationStatus);
             var lab_ConservationStatus = document.createElement('div');
             lab_ConservationStatus.innerHTML = 'Conservation Status';
             lab_ConservationStatus.className = 'filterlabel';
             div_ConservationStatus.appendChild(lab_ConservationStatus);
-            var reset_ConservationStatus = document.createElement('div');
-            reset_ConservationStatus.innerHTML = 'clear filter';
-            reset_ConservationStatus.className = 'filterlabel';
+            div_ConservationStatus.appendChild(sel_ConservationStatus);
+            var reset_ConservationStatus = document.createElement('button');
+            reset_ConservationStatus.type = 'button';
+            reset_ConservationStatus.textContent = 'Clear Filter';
+            reset_ConservationStatus.className = 'clear-filter-btn';
             reset_ConservationStatus.onclick = function() {
                 var options = document.getElementById("sel_ConservationStatus").options;
                 for (var i=0; i < options.length; i++) {
@@ -851,8 +948,7 @@
             div_ScriptoftheInscription.className= "filterselect";
             document.getElementById("menu").appendChild(div_ScriptoftheInscription);
             sel_ScriptoftheInscription = document.createElement('select');
-            sel_ScriptoftheInscription.multiple = true;
-            sel_ScriptoftheInscription.size = 5;
+            sel_ScriptoftheInscription.setAttribute('multiple', 'multiple');
             sel_ScriptoftheInscription.id = "sel_ScriptoftheInscription";
             var ScriptoftheInscription_options_str = "<option value='' unselected></option>";
             sel_ScriptoftheInscription.onchange = function(){filterFunc()};
@@ -862,14 +958,15 @@
             ScriptoftheInscription_options_str  += '<option value="NA - WOI">NA - WOI</option>';
             ScriptoftheInscription_options_str  += '<option value="Tamil">Tamil</option>';
             sel_ScriptoftheInscription.innerHTML = ScriptoftheInscription_options_str;
-            div_ScriptoftheInscription.appendChild(sel_ScriptoftheInscription);
             var lab_ScriptoftheInscription = document.createElement('div');
             lab_ScriptoftheInscription.innerHTML = 'Script of the Inscription';
             lab_ScriptoftheInscription.className = 'filterlabel';
             div_ScriptoftheInscription.appendChild(lab_ScriptoftheInscription);
-            var reset_ScriptoftheInscription = document.createElement('div');
-            reset_ScriptoftheInscription.innerHTML = 'clear filter';
-            reset_ScriptoftheInscription.className = 'filterlabel';
+            div_ScriptoftheInscription.appendChild(sel_ScriptoftheInscription);
+            var reset_ScriptoftheInscription = document.createElement('button');
+            reset_ScriptoftheInscription.type = 'button';
+            reset_ScriptoftheInscription.textContent = 'Clear Filter';
+            reset_ScriptoftheInscription.className = 'clear-filter-btn';
             reset_ScriptoftheInscription.onclick = function() {
                 var options = document.getElementById("sel_ScriptoftheInscription").options;
                 for (var i=0; i < options.length; i++) {
