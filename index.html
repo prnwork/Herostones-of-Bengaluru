@@ -12,94 +12,45 @@
     <link rel="stylesheet" href="css/fontawesome-all.min.css">
     <link rel="stylesheet" href="css/filter.css">
     <link rel="stylesheet" href="css/nouislider.min.css">
+    <link rel="stylesheet" href="css/nouislider-custom.css">
     <link rel="stylesheet" href="css/leaflet.photon.css">
-    <link rel="stylesheet" href="css/nav-bar.css">
     <!-- Leaflet.markercluster plugin CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
     <style>
-    /* Multiselect dropdown styles */
-    .ms-dropdown-wrapper { margin-bottom: 12px; }
-    .ms-dropdown-btn {
-        min-height: 32px;
-        position: relative;
-        width: 100%;
-        text-align: left;
-        padding: 6px 36px 6px 10px;
-        border: 1px solid #bbb;
-        border-radius: 4px;
-        background: #f9f9f9;
-        font-size: 1em;
-        cursor: pointer;
-    }
-    .ms-dropdown-btn::after {
-        content: '';
-        position: absolute;
-        right: 14px;
-        top: 50%;
-        width: 18px;
-        height: 18px;
-        pointer-events: none;
-        background: url('data:image/svg+xml;utf8,<svg fill="%23666" height="20" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M7.293 8.293a1 1 0 011.414 0L10 9.586l1.293-1.293a1 1 0 111.414 1.414l-2 2a1 1 0 01-1.414 0l-2-2a1 1 0 010-1.414z"/></svg>') no-repeat center center/18px 18px;
-        transform: translateY(-50%);
-    }
-    .ms-dropdown-list {
-        margin-top: 2px;
-        border-radius: 0 0 4px 4px;
-        box-shadow: 0 2px 8px rgba(128,0,0,0.08);
-        background: #fff;
-        border: 1px solid #bbb;
-        border-top: none;
-        z-index: 1000;
-        max-height: 180px;
-        overflow-y: auto;
-    }
-    .ms-dropdown-list label {
-        display: flex;
-        align-items: center;
-        padding: 4px 8px;
-        cursor: pointer;
-        font-size: 1em;
-        gap: 8px;
-    }
-    .ms-dropdown-list label:hover {
-        background: #f1f1f1;
-    }
-    .ms-dropdown-list input[type="checkbox"] {
-        accent-color: maroon;
-        margin-right: 8px;
-        margin-left: 0;
-        vertical-align: middle;
-        width: 16px;
-        height: 16px;
-        flex-shrink: 0;
-    }
-    /* Style for filter dropdowns (native select fallback) */
-    .filterselect select {
-        width: 100%;
-        padding: 6px 36px 6px 10px;
-        border: 1px solid #bbb;
-        border-radius: 4px;
-        background: #f9f9f9 url('data:image/svg+xml;utf8,<svg fill="%23666" height="20" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M7.293 8.293a1 1 0 011.414 0L10 9.586l1.293-1.293a1 1 0 111.414 1.414l-2 2a1 1 0 01-1.414 0l-2-2a1 1 0 010-1.414z"/></svg>') no-repeat right 12px center/18px 18px;
-        font-size: 1em;
-        margin-bottom: 6px;
-        appearance: none;
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        cursor: pointer;
-    }
-    .filterselect select:focus {
-        outline: 2px solid #4363d8;
-        background-color: #fff;
-    }
-    .filterselect {
-        margin-bottom: 12px;
-        padding-left: 10px;
-        padding-right: 10px;
-    }
-    </style>
-        <style>
+        /* Sidebar toggle button with interactive arrow */
+        #sidebar-toggle {
+            position: absolute;
+            right: -44px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: maroon;
+            color: #fff;
+            border: none;
+            border-radius: 0 6px 6px 0;
+            cursor: pointer;
+            font-size: 1.2em;
+            z-index: 3001;
+            height: 44px;
+            width: 44px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s, right 0.35s cubic-bezier(.4,1.4,.6,1);
+        }
+        #sidebar-toggle .chevron {
+            font-size: 1.5em;
+            transition: transform 0.3s cubic-bezier(.4,1.4,.6,1);
+            transform: rotate(0deg);
+        }
+        #sidebar-toggle:hover, #sidebar-toggle:focus {
+            background: #b71c1c;
+        }
         /* Add top padding to the Period (Century) filter section title */
+        #menu {
+            padding-right: 10px;
+        }
         #menu .period-century-label {
             padding-top: 10px;
             padding-left: 12px;
@@ -170,12 +121,38 @@
         /* Style for filter dropdowns */
         .filterselect select {
             width: 95%;
-            padding: 6px 8px;
+            padding: 6px 32px 6px 8px;
             border: 1px solid #bbb;
             border-radius: 4px;
             background: #f9f9f9;
             font-size: 1em;
             margin-bottom: 6px;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url('data:image/svg+xml;utf8,<svg fill="%23666" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+            background-size: 20px 20px;
+            cursor: pointer;
+        }
+        .ms-dropdown-btn {
+            width: 95%;
+            padding: 6px 32px 6px 8px;
+            border: 1px solid #bbb;
+            border-radius: 4px;
+            background: #f9f9f9;
+            font-size: 1em;
+            margin-bottom: 6px;
+            text-align: left;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url('data:image/svg+xml;utf8,<svg fill="%23666" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+            background-size: 20px 20px;
+            cursor: pointer;
         }
         .filterselect select:focus {
             outline: 2px solid #4363d8;
@@ -198,162 +175,112 @@
             padding: 0;
             margin: 0;
         }
+        .sidebar-fab {
+            position: absolute;
+            top: 50%;
+            left: -28px;
+            transform: translateY(-50%);
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(to bottom, #a1001a 0%, #800000 100%);
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            box-shadow: 0 2px 12px rgba(128,0,0,0.18);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 3000;
+            transition: background 0.2s, color 0.2s, box-shadow 0.2s, filter 0.2s;
+            outline: none;
+        }
+        .sidebar-fab:hover, .sidebar-fab:focus {
+            filter: brightness(1.08) drop-shadow(0 4px 16px #80000044);
+            background: linear-gradient(to bottom, #b71c1c 0%, #800000 100%);
+            color: #fff;
+        }
+        .sidebar-fab-icon {
+            font-size: 1.6em;
+            display: inline-block;
+            transition: transform 0.2s;
+            color: #fff;
+        }
+        .sidebar-fab-text {
+            position: absolute;
+            top: 50%;
+            left: -110px;
+            transform: translateY(-50%) rotate(-90deg);
+            min-width: 100px;
+            height: 44px;
+            background: linear-gradient(to bottom, #a1001a 0%, #800000 100%);
+            color: #fff;
+            border: none;
+            border-radius: 22px;
+            box-shadow: 0 2px 12px rgba(128,0,0,0.18);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 3000;
+            transition: background 0.2s, color 0.2s, box-shadow 0.2s, filter 0.2s;
+            outline: none;
+            font-size: 1.1em;
+            font-weight: 600;
+            padding: 0 18px;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+        .sidebar-fab-text:hover, .sidebar-fab-text:focus {
+            filter: brightness(1.08) drop-shadow(0 4px 16px #80000044);
+            background: linear-gradient(to bottom, #b71c1c 0%, #800000 100%);
+            color: #fff;
+        }
         </style>
         <title>Herostones of United Bengaluru District</title>
     </head>
-        <body style="margin:0; padding:0;">
-                <nav class="navbar">
-                    <div class="navbar-left">
-                        <div class="project-title">The Mythic Society Bengaluru Inscription Digital Conservation Project</div>
-                    </div>
-                    <div class="navbar-right">
-                        <a class="nav-link" href="https://mythicsociety.github.io/AksharaBhandara/#/" target="_blank" rel="noopener">Akshara Bhandara</a>
-                        <span class="navbar-logo">
-                            <img src="css/images/1.png" alt="AksharaBhandara_logo" />
-                            <img src="css/images/0.png" alt="MythicSociety_logo" />
-                        </span>
-                    </div>
-                </nav>
-                <div id="main-flex" style="position: relative; width: 100vw; height: 100vh; margin-top:50px;">
-                    <div id="map" style="position: absolute; left: 0; top: 0; width: 100vw; height: 100vh; z-index: 1;"></div>
-                    <div id="menu" style="position: absolute; top: 0; right: 0; width: 340px; max-width: 340px; min-width: 260px; height: 100vh; background: #fff; box-shadow: -2px 0 8px rgba(128,0,0,0.08); padding-top: 18px; overflow-y: auto; border-left: 1.5px solid #d3d3d3; transition: transform 0.35s cubic-bezier(.4,0,.2,1); z-index: 20;">
-                <!-- Sidebar filter controls go here (keep your previous HTML for filters) -->
-                <!-- Layer control removed from sidebar; will be placed above zoom control on map -->
-                                <div class="filterselect" id="period-century-panel" style="padding: 0 10px 12px 10px; background: #f8f6f6; border-radius: 8px; margin-bottom: 16px;">
-                                    <div class="filterlabel period-century-label" style="margin-top: 10px;">Period (Century): <span id="val_PeriodCentury"></span></div>
-                                    <div id="div_PeriodCentury" class="slider"></div>
-                                    <button type="button" class="clear-filter-btn" onclick="sel_PeriodCentury.noUiSlider.reset()">Clear Filter</button>
-                                </div>
-                <div class="filterselect">
-                    <div class="filterlabel">With or Without Inscription</div>
-                    <select multiple id="sel_WithorWithoutInscription">
-                        <option value="With Inscription">With Inscription</option>
-                        <option value="Without Inscription">Without Inscription</option>
-                    </select>
-                    <button type="button" class="clear-filter-btn" onclick="var o=document.getElementById('sel_WithorWithoutInscription').options;for(var i=0;i<o.length;i++){o[i].selected=false;}filterFunc();">Clear Filter</button>
-                </div>
-                <div class="filterselect">
-                    <div class="filterlabel">District</div>
-                    <select multiple id="sel_District">
-                        <option value="NULL">NULL</option>
-                        <option value="Bengaluru Rural">Bengaluru Rural</option>
-                        <option value="Bengaluru Urban">Bengaluru Urban</option>
-                        <option value="Mandya">Mandya</option>
-                        <option value="Ramanagara">Ramanagara</option>
-                    </select>
-                    <button type="button" class="clear-filter-btn" onclick="var o=document.getElementById('sel_District').options;for(var i=0;i<o.length;i++){o[i].selected=false;}filterFunc();">Clear Filter</button>
-                </div>
-                <div class="filterselect">
-                    <div class="filterlabel">Type of Herostone</div>
-                    <select multiple id="sel_TypeofHerostone">
-                        <option value="Aatma Balidana (Self Sacrifice) Herostone">Aatma Balidana (Self Sacrifice) Herostone</option>
-                        <option value="Beeragallu (Kuruba)">Beeragallu (Kuruba)</option>
-                        <option value="Broken Herostone">Broken Herostone</option>
-                        <option value="Handibete (Boar)">Handibete (Boar)</option>
-                        <option value="Havubete (Snake)">Havubete (Snake)</option>
-                        <option value="Herostone">Herostone</option>
-                        <option value="Hulibete (Tiger)">Hulibete (Tiger)</option>
-                        <option value="Hulibete and Turugol (Tiger and Cattle)">Hulibete and Turugol (Tiger and Cattle)</option>
-                        <option value="Hulibete and Veera Masti (Tiger and Veeera Masti)">Hulibete and Veera Masti (Tiger and Veeera Masti)</option>
-                        <option value="Ikkaimasti">Ikkaimasti</option>
-                        <option value="Jinke Bete (Deer)">Jinke Bete (Deer)</option>
-                        <option value="Kote Kalaga">Kote Kalaga</option>
-                        <option value="Mahasati stone">Mahasati stone</option>
-                        <option value="Mukkaimasti">Mukkaimasti</option>
-                        <option value="Nishadi">Nishadi</option>
-                        <option value="Okkai">Okkai</option>
-                        <option value="Rifle Herostone ">Rifle Herostone </option>
-                        <option value="Sati  ">Sati  </option>
-                        <option value="Skirmish">Skirmish</option>
-                        <option value="Skirmish and Veera Masti">Skirmish and Veera Masti</option>
-                        <option value="Skirmish with Robbers">Skirmish with Robbers</option>
-                        <option value="Turugol (Cattle)">Turugol (Cattle)</option>
-                        <option value="Unclear Cause Herostone">Unclear Cause Herostone</option>
-                        <option value="Uralivu">Uralivu</option>
-                        <option value="Uralivu and Turugol">Uralivu and Turugol</option>
-                        <option value="Vanara (Monkey) Memorial">Vanara (Monkey) Memorial</option>
-                        <option value="Veera Masti">Veera Masti</option>
-                        <option value="Veera Masti and (Hulibete ?)">Veera Masti and (Hulibete ?)</option>
-                        <option value="Veera Masti and Turugol">Veera Masti and Turugol</option>
-                        <option value="Velevali">Velevali</option>
-                    </select>
-                    <button type="button" class="clear-filter-btn" onclick="var o=document.getElementById('sel_TypeofHerostone').options;for(var i=0;i<o.length;i++){o[i].selected=false;}filterFunc();">Clear Filter</button>
-                </div>
-                <div class="filterselect">
-                    <div class="filterlabel">Conservation Status</div>
-                    <select multiple id="sel_ConservationStatus">
-                        <option value="Buried">Buried</option>
-                        <option value="Critically Endangered">Critically Endangered</option>
-                        <option value="Endangered">Endangered</option>
-                        <option value="Intact">Intact</option>
-                        <option value="Known to be destroyed">Known to be destroyed</option>
-                        <option value="Least Concern">Least Concern</option>
-                        <option value="Unknown">Unknown</option>
-                        <option value="Yet to Veriefy">Yet to Veriefy</option>
-                    </select>
-                    <button type="button" class="clear-filter-btn" onclick="var o=document.getElementById('sel_ConservationStatus').options;for(var i=0;i<o.length;i++){o[i].selected=false;}filterFunc();">Clear Filter</button>
-                </div>
-                <div class="filterselect">
-                    <div class="filterlabel">Script of the Inscription</div>
-                    <select multiple id="sel_ScriptoftheInscription">
-                        <option value="NULL">NULL</option>
-                        <option value="Granta & Tamil">Granta & Tamil</option>
-                        <option value="Kannada">Kannada</option>
-                        <option value="NA - WOI">NA - WOI</option>
-                        <option value="Tamil">Tamil</option>
-                    </select>
-                    <button type="button" class="clear-filter-btn" onclick="var o=document.getElementById('sel_ScriptoftheInscription').options;for(var i=0;i<o.length;i++){o[i].selected=false;}filterFunc();">Clear Filter</button>
-                </div>
+        <body>
+        <!-- Top Navigation Bar -->
+        <link rel="stylesheet" href="css/nav-bar.css">
+        <nav class="navbar">
+            <div class="navbar-logo">
+                <img src="css/images/0.png" alt="Akshara Bhandara" />
+                <img src="css/images/1.png" alt="The Mythic Society" />
+                <span class="navbar-divider"></span>
+                <span class="project-title">The Mythic Society Bengaluru Inscription<br>Digital Conservation Project</span>
             </div>
-            <button id="sidebar-toggle" aria-label="Toggle sidebar" style="position: absolute; right: 340px; top: 32px; z-index: 30; width: 38px; height: 38px; border: none; border-radius: 20px 0 0 20px; background: maroon; color: #fff; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(128,0,0,0.12); cursor: pointer; transition: right 0.35s cubic-bezier(.4,0,.2,1);">
-                <span id="sidebar-arrow" style="display: block; font-size: 1.6em; transition: transform 0.35s cubic-bezier(.4,0,.2,1);">&#x25C0;</span>
-            </button>
+            <div class="navbar-right">
+                <span class="map-title">
+                    ಅಖಂಡ ಬೆಂಗಳೂರು ಜಿಲ್ಲೆಯ ವೀರಗಲ್ಲುಗಳು <br>
+                    Herostones of United Bengaluru District
+                </span>
+            </div>
+        </nav>
+    <!-- Sidebar, background, and toggle button (right side) -->
+    <div id="map"></div>
+    <div id="sidebar-container" style="position:fixed;top:var(--navbar-height,60px);left:0;height:calc(100vh - var(--navbar-height,60px));z-index:2001;pointer-events:auto;">
+        <div id="sidebar-inner" style="position:relative;width:320px;height:100vh;transition:transform 0.35s cubic-bezier(.4,1.4,.6,1);will-change:transform;display:flex;">
+            <div id="menu" style="width:320px;height:100vh;overflow-y:auto;position:relative;top:0;left:0;background:rgba(255,255,255,0.85);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);box-shadow:2px 0 16px 0 rgba(0,0,0,0.08);pointer-events:auto;"></div>
+            <button id="sidebar-toggle" aria-label="Toggle sidebar"><span class="chevron"><i class="fas fa-chevron-left"></i></span></button>
         </div>
-                                <script>
-                                // Sidebar slides over map, toggle button is always at sidebar edge
-                                const sidebar = document.getElementById('menu');
-                                const toggleBtn = document.getElementById('sidebar-toggle');
-                                const arrow = document.getElementById('sidebar-arrow');
-                                let sidebarOpen = true;
-                                function setSidebar(open) {
-                                        sidebarOpen = open;
-                                        if (open) {
-                                                sidebar.style.transform = 'translateX(0)';
-                                                toggleBtn.style.right = '340px';
-                                                arrow.innerHTML = '&#x25C0;'; // left arrow
-                                        } else {
-                                                sidebar.style.transform = 'translateX(100%)';
-                                                toggleBtn.style.right = '0px';
-                                                arrow.innerHTML = '&#x25B6;'; // right arrow
-                                        }
-                                        setTimeout(function() {
-                                                if (window.map && window.map.invalidateSize) window.map.invalidateSize();
-                                        }, 400);
-                                }
-                                toggleBtn.addEventListener('click', function() {
-                                        setSidebar(!sidebarOpen);
-                                });
-                                window.addEventListener('resize', function() {
-                                        if (sidebarOpen) toggleBtn.style.right = '340px';
-                                });
-                                setSidebar(true);
-
-                                                // Move the Leaflet layer control above the zoom control on the left
-                                                window.addEventListener('DOMContentLoaded', function() {
-                                                    setTimeout(function() {
-                                                        var lc = document.querySelector('.leaflet-control-layers');
-                                                        var zoom = document.querySelector('.leaflet-control-zoom');
-                                                        if (lc && zoom && zoom.parentNode) {
-                                                            zoom.parentNode.insertBefore(lc, zoom);
-                                                            lc.style.position = '';
-                                                            lc.style.margin = '';
-                                                            lc.style.width = '';
-                                                        }
-                                                    }, 500);
-                                                });
-                                </script>
+    </div>
     <!-- JS Dependencies -->
     <script src="js/qgis2web_expressions.js"></script>
+    <script>
+    // Dynamically set --navbar-height CSS variable based on navbar height
+    function setNavbarHeightVar() {
+        var navbar = document.querySelector('.navbar, #top-navbar');
+        if (navbar) {
+            var h = navbar.offsetHeight;
+            document.documentElement.style.setProperty('--navbar-height', h + 'px');
+        }
+    }
+    // Set immediately, before DOMContentLoaded, to avoid FOUC/overlap
+    setNavbarHeightVar();
+    window.addEventListener('DOMContentLoaded', setNavbarHeightVar);
+    window.addEventListener('resize', setNavbarHeightVar);
+    setTimeout(setNavbarHeightVar, 100); // In case of late font/image load
+    </script>
     <script src="js/leaflet.js"></script>
     <!-- Leaflet.markercluster plugin JS -->
     <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
@@ -369,14 +296,13 @@
     <script src="js/tailDT.js"></script>
     <script src="js/nouislider.min.js"></script>
     <script src="js/wNumb.js"></script>
-    <script src="js/multiselect-dropdown.js"></script>
     <!-- Data Files -->
     <script src="data/RamanagaraDistrict_1.js"></script>
     <script src="data/BengaluruRuralDistrict_2.js"></script>
     <script src="data/BengaluruUrbanDistrict_3.js"></script>
     <script src="data/MandyaDistrict_4.js"></script>
     <script src="data/HeroStonesofUnitedBengaluruDistrict_5.js"></script>
-        <script>
+    <script>
         var highlightLayer;
         function highlightFeature(e) {
             highlightLayer = e.target;
@@ -393,7 +319,9 @@
             }
             highlightLayer.openPopup();
         }
-        var map = L.map('map', {
+    // Adjust map top margin for navbar
+    document.body.style.marginTop = '48px';
+    var map = L.map('map', {
             zoomControl:false, maxZoom:28, minZoom:1
         }).fitBounds([[12.320663192969104,76.32331776067834],[13.400287716827064,78.35451868718586]]);
         var hash = new L.Hash(map);
@@ -427,17 +355,8 @@
 				popup._contentNode.classList.remove('media');
 			}
 		}
-        var title = new L.Control({'position':'topleft'});
-        title.onAdd = function (map) {
-            this._div = L.DomUtil.create('div', 'info');
-            this.update();
-            return this._div;
-        };
-        title.update = function () {
-            this._div.innerHTML = '<h2>Herostones of United Bengaluru District</h2>';
-        };
-        title.addTo(map);
-        var abstract = new L.Control({'position':'bottomleft'});
+    // Removed the 'Herostones of United Bengaluru District' title control above the zoom control
+        var abstract = new L.Control({'position':'bottomright'});
         abstract.onAdd = function (map) {
             this._div = L.DomUtil.create('div',
             'leaflet-control abstract');
@@ -453,7 +372,7 @@
         };
         abstract.addTo(map);
         var zoomControl = L.control.zoom({
-            position: 'topleft'
+            position: 'topright'
         }).addTo(map);
         var bounds_group = new L.featureGroup([]);
         function setBounds() {
@@ -802,7 +721,7 @@
         var photonControl = L.control.photon({
             url: url["Nominatim"],
             feedbackLabel: '',
-            position: 'topleft',
+            position: 'topright',
             includePosition: true,
             initial: true,
             // resultsHandler: myHandler,
@@ -865,28 +784,34 @@
             //collapseAll: 'Collapse all',
             //expandAll: 'Expand all',
             collapsed: true,
+            position: 'topright'
         });
         lay.addTo(map);
         setBounds();
-        var mapDiv = document.getElementById('map');
-        var row = document.createElement('div');
-        row.className="row";
-        row.id="all";
-        row.style.height = "100%";
-        var col1 = document.createElement('div');
-        col1.className="col9";
-        col1.id = "mapWindow";
-        col1.style.height = "99%";
-        col1.style.width = "80%";
-        col1.style.display = "inline-block";
-        var col2 = document.createElement('div');
-        col2.className="col3";
-        col2.id = "menu";
-        col2.style.display = "inline-block";
-        mapDiv.parentNode.insertBefore(row, mapDiv);
-        document.getElementById("all").appendChild(col1);
-        document.getElementById("all").appendChild(col2);
-        col1.appendChild(mapDiv)
+    // No sidebar DOM construction needed, handled in HTML above
+
+                // Sidebar toggle button logic (button outside sidebar, always visible)
+                var sidebarBtn = document.getElementById('sidebar-toggle');
+                var sidebarInner = document.getElementById('sidebar-inner');
+                var sidebarVisible = true;
+                sidebarBtn.onclick = function() {
+                    sidebarVisible = !sidebarVisible;
+                    if (sidebarVisible) {
+                        sidebarInner.style.transform = 'translateX(0)';
+                        sidebarBtn.classList.remove('closed');
+                        sidebarBtn.querySelector('.chevron i').classList.remove('fa-chevron-right');
+                        sidebarBtn.querySelector('.chevron i').classList.add('fa-chevron-left');
+                    } else {
+                        sidebarInner.style.transform = 'translateX(-100%)';
+                        sidebarBtn.classList.add('closed');
+                        sidebarBtn.querySelector('.chevron i').classList.remove('fa-chevron-left');
+                        sidebarBtn.querySelector('.chevron i').classList.add('fa-chevron-right');
+                    }
+                };
+                // Start with sidebar visible
+                sidebarInner.style.transform = 'translateX(0)';
+                sidebarBtn.querySelector('.chevron i').classList.remove('fa-chevron-right');
+                sidebarBtn.querySelector('.chevron i').classList.add('fa-chevron-left');
         var Filters = {"Period (Century)": "int","With or Without Inscription": "str","District": "str","Type of Herostone": "str","Conservation Status": "str","Script of the Inscription": "str"};
         function filterFunc() {
                     // Custom: handle marker clustering for Herostones layer
@@ -972,25 +897,46 @@
                     }
                     // ...existing code for other layers...
         }
-            // Only initialize the slider on the static HTML element in the sidebar
+            document.getElementById("menu").appendChild(
+                document.createElement("div"));
+            var div_PeriodCentury = document.createElement("div");
+            div_PeriodCentury.id = "div_PeriodCentury";
+            div_PeriodCentury.className = "slider";
+            var lab_PeriodCentury = document.createElement('div');
+            lab_PeriodCentury.innerHTML  = 'Period (Century): <span id="val_PeriodCentury"></span>';
+            lab_PeriodCentury.className = 'filterlabel period-century-label';
+            document.getElementById("menu").appendChild(lab_PeriodCentury);
+            document.getElementById("menu").appendChild(div_PeriodCentury);
+            var reset_PeriodCentury = document.createElement('button');
+            reset_PeriodCentury.type = 'button';
+            reset_PeriodCentury.textContent = 'Clear Filter';
+            reset_PeriodCentury.className = 'clear-filter-btn';
+            reset_PeriodCentury.onclick = function() {
+                sel_PeriodCentury.noUiSlider.reset();
+            };
+            document.getElementById("menu").appendChild(reset_PeriodCentury);
             var sel_PeriodCentury = document.getElementById('div_PeriodCentury');
-            if (sel_PeriodCentury && !sel_PeriodCentury.noUiSlider) {
-                noUiSlider.create(sel_PeriodCentury, {
-                    connect: true,
-                    start: [8, 18],
-                    step: 1,
-                    format: wNumb({ decimals: 0 }),
-                    range: {
-                        min: 8,
-                        max: 18
-                    }
-                });
-                sel_PeriodCentury.noUiSlider.on('update', function (values) {
-                    var val_PeriodCentury = document.getElementById('val_PeriodCentury');
-                    val_PeriodCentury.innerHTML = values.join(' - ');
-                    filterFunc();
-                });
+            noUiSlider.create(sel_PeriodCentury, {
+                connect: true,
+                start: [8, 18],
+                step: 1,
+                format: wNumb({
+                    decimals: 0,
+                    }),
+                range: {
+                min: 8,
+                max: 18
+                }
+            });
+            sel_PeriodCentury.noUiSlider.on('update', function (values) {
+            filterVals =[];
+            for (value in values){
+            filterVals.push(parseInt(value))
             }
+            val_PeriodCentury = document.getElementById('val_PeriodCentury');
+            val_PeriodCentury.innerHTML = values.join(' - ');
+                filterFunc()
+            });
             document.getElementById("menu").appendChild(
                 document.createElement("div"));
             var div_WithorWithoutInscription = document.createElement('div');
@@ -1015,15 +961,25 @@
             reset_WithorWithoutInscription.textContent = 'Clear Filter';
             reset_WithorWithoutInscription.className = 'clear-filter-btn';
             reset_WithorWithoutInscription.onclick = function() {
-                var options = document.getElementById("sel_WithorWithoutInscription").options;
+                var select = document.getElementById("sel_WithorWithoutInscription");
+                var options = select.options;
                 for (var i=0; i < options.length; i++) {
                     options[i].selected = false;
+                }
+                // Reset custom dropdown UI
+                var wrapper = select.parentNode.querySelector('.ms-dropdown-wrapper');
+                if (wrapper) {
+                    var checkboxes = wrapper.querySelectorAll('input[type=checkbox]');
+                    checkboxes.forEach(function(cb) { cb.checked = false; });
+                    var btn = wrapper.querySelector('.ms-dropdown-btn');
+                    if (btn) btn.textContent = 'Select...';
                 }
                 filterFunc();
             };
             div_WithorWithoutInscription.appendChild(reset_WithorWithoutInscription);
             document.getElementById("menu").appendChild(
                 document.createElement("div"));
+            // Multi-select dropdown with checkboxes will be applied by multiselect-dropdown.js
             var div_District = document.createElement('div');
             div_District.id = "div_District";
             div_District.className= "filterselect";
@@ -1049,15 +1005,24 @@
             reset_District.textContent = 'Clear Filter';
             reset_District.className = 'clear-filter-btn';
             reset_District.onclick = function() {
-                var options = document.getElementById("sel_District").options;
+                var select = document.getElementById("sel_District");
+                var options = select.options;
                 for (var i=0; i < options.length; i++) {
                     options[i].selected = false;
+                }
+                var wrapper = select.parentNode.querySelector('.ms-dropdown-wrapper');
+                if (wrapper) {
+                    var checkboxes = wrapper.querySelectorAll('input[type=checkbox]');
+                    checkboxes.forEach(function(cb) { cb.checked = false; });
+                    var btn = wrapper.querySelector('.ms-dropdown-btn');
+                    if (btn) btn.textContent = 'Select...';
                 }
                 filterFunc();
             };
             div_District.appendChild(reset_District);
             document.getElementById("menu").appendChild(
                 document.createElement("div"));
+            // Multi-select dropdown with checkboxes will be applied by multiselect-dropdown.js
             var div_TypeofHerostone = document.createElement('div');
             div_TypeofHerostone.id = "div_TypeofHerostone";
             div_TypeofHerostone.className= "filterselect";
@@ -1108,15 +1073,24 @@
             reset_TypeofHerostone.textContent = 'Clear Filter';
             reset_TypeofHerostone.className = 'clear-filter-btn';
             reset_TypeofHerostone.onclick = function() {
-                var options = document.getElementById("sel_TypeofHerostone").options;
+                var select = document.getElementById("sel_TypeofHerostone");
+                var options = select.options;
                 for (var i=0; i < options.length; i++) {
                     options[i].selected = false;
+                }
+                var wrapper = select.parentNode.querySelector('.ms-dropdown-wrapper');
+                if (wrapper) {
+                    var checkboxes = wrapper.querySelectorAll('input[type=checkbox]');
+                    checkboxes.forEach(function(cb) { cb.checked = false; });
+                    var btn = wrapper.querySelector('.ms-dropdown-btn');
+                    if (btn) btn.textContent = 'Select...';
                 }
                 filterFunc();
             };
             div_TypeofHerostone.appendChild(reset_TypeofHerostone);
             document.getElementById("menu").appendChild(
                 document.createElement("div"));
+            // Multi-select dropdown with checkboxes will be applied by multiselect-dropdown.js
             var div_ConservationStatus = document.createElement('div');
             div_ConservationStatus.id = "div_ConservationStatus";
             div_ConservationStatus.className= "filterselect";
@@ -1145,15 +1119,24 @@
             reset_ConservationStatus.textContent = 'Clear Filter';
             reset_ConservationStatus.className = 'clear-filter-btn';
             reset_ConservationStatus.onclick = function() {
-                var options = document.getElementById("sel_ConservationStatus").options;
+                var select = document.getElementById("sel_ConservationStatus");
+                var options = select.options;
                 for (var i=0; i < options.length; i++) {
                     options[i].selected = false;
+                }
+                var wrapper = select.parentNode.querySelector('.ms-dropdown-wrapper');
+                if (wrapper) {
+                    var checkboxes = wrapper.querySelectorAll('input[type=checkbox]');
+                    checkboxes.forEach(function(cb) { cb.checked = false; });
+                    var btn = wrapper.querySelector('.ms-dropdown-btn');
+                    if (btn) btn.textContent = 'Select...';
                 }
                 filterFunc();
             };
             div_ConservationStatus.appendChild(reset_ConservationStatus);
             document.getElementById("menu").appendChild(
                 document.createElement("div"));
+            // Multi-select dropdown with checkboxes will be applied by multiselect-dropdown.js
             var div_ScriptoftheInscription = document.createElement('div');
             div_ScriptoftheInscription.id = "div_ScriptoftheInscription";
             div_ScriptoftheInscription.className= "filterselect";
@@ -1179,13 +1162,23 @@
             reset_ScriptoftheInscription.textContent = 'Clear Filter';
             reset_ScriptoftheInscription.className = 'clear-filter-btn';
             reset_ScriptoftheInscription.onclick = function() {
-                var options = document.getElementById("sel_ScriptoftheInscription").options;
+                var select = document.getElementById("sel_ScriptoftheInscription");
+                var options = select.options;
                 for (var i=0; i < options.length; i++) {
                     options[i].selected = false;
+                }
+                var wrapper = select.parentNode.querySelector('.ms-dropdown-wrapper');
+                if (wrapper) {
+                    var checkboxes = wrapper.querySelectorAll('input[type=checkbox]');
+                    checkboxes.forEach(function(cb) { cb.checked = false; });
+                    var btn = wrapper.querySelector('.ms-dropdown-btn');
+                    if (btn) btn.textContent = 'Select...';
                 }
                 filterFunc();
             };
             div_ScriptoftheInscription.appendChild(reset_ScriptoftheInscription);
-        </script>
+            // Multi-select dropdown will be applied by multiselect-dropdown.js
+    </script>
+    <script src="js/multiselect-dropdown.js"></script>
     </body>
 </html>
