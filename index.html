@@ -13,7 +13,9 @@
     <link rel="stylesheet" href="css/filter.css">
     <link rel="stylesheet" href="css/nouislider.min.css">
     <link rel="stylesheet" href="css/nouislider-custom.css">
+    <link rel="stylesheet" href="css/custom.css">
     <link rel="stylesheet" href="css/leaflet.photon.css">
+    <!-- <link rel="stylesheet" href="lib/opacity/Control.Opacity.css"> -->
     <!-- Leaflet.markercluster plugin CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
@@ -22,9 +24,9 @@
         #sidebar-toggle {
             position: absolute;
             right: -44px;
-            top: 50%;
+            top: 40%;
             transform: translateY(-50%);
-            background: maroon;
+            background: #800000;
             color: #fff;
             border: none;
             border-radius: 0 6px 6px 0;
@@ -45,7 +47,7 @@
             transform: rotate(0deg);
         }
         #sidebar-toggle:hover, #sidebar-toggle:focus {
-            background: #b71c1c;
+            background: #800000;
         }
         /* Add top padding to the Period (Century) filter section title */
         #menu {
@@ -237,22 +239,22 @@
             color: #fff;
         }
         </style>
+        <!-- Chip styles moved to custom.css -->
         <title>Herostones of United Bengaluru District</title>
     </head>
         <body>
         <!-- Top Navigation Bar -->
         <link rel="stylesheet" href="css/nav-bar.css">
         <nav class="navbar">
-            <div class="navbar-logo">
-                <img src="css/images/0.png" alt="Akshara Bhandara" />
-                <img src="css/images/1.png" alt="The Mythic Society" />
+            <div class="navbar-logo">                
+                <img src="css/images/0.png" alt="The Mythic Society" />
                 <span class="navbar-divider"></span>
                 <span class="project-title">The Mythic Society Bengaluru Inscription<br>Digital Conservation Project</span>
             </div>
             <div class="navbar-right">
                 <span class="map-title">
-                    ಅಖಂಡ ಬೆಂಗಳೂರು ಜಿಲ್ಲೆಯ ವೀರಗಲ್ಲುಗಳು <br>
-                    Herostones of United Bengaluru District
+                    ಬೆಂಗಳೂರ ವೀರಗಲ್ಲುಗಳು <br>
+                    Herostones of Bengaluru
                 </span>
             </div>
         </nav>
@@ -260,7 +262,7 @@
     <div id="map"></div>
     <div id="sidebar-container" style="position:fixed;top:var(--navbar-height,60px);left:0;height:calc(100vh - var(--navbar-height,60px));z-index:2001;pointer-events:auto;">
         <div id="sidebar-inner" style="position:relative;width:320px;height:100vh;transition:transform 0.35s cubic-bezier(.4,1.4,.6,1);will-change:transform;display:flex;">
-            <div id="menu" style="width:320px;height:100vh;overflow-y:auto;position:relative;top:0;left:0;background:rgba(255,255,255,0.85);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);box-shadow:2px 0 16px 0 rgba(0,0,0,0.08);pointer-events:auto;"></div>
+            <div id="menu" style="height:100vh;overflow-y:auto;position:relative;top:0;left:0;background:rgba(255,255,255,0.85);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);box-shadow:2px 0 16px 0 rgba(0,0,0,0.08);pointer-events:auto"></div>
             <button id="sidebar-toggle" aria-label="Toggle sidebar"><span class="chevron"><i class="fas fa-chevron-left"></i></span></button>
         </div>
     </div>
@@ -288,6 +290,7 @@
     <script src="js/leaflet.rotatedMarker.js"></script>
     <script src="js/leaflet.pattern.js"></script>
     <script src="js/leaflet-hash.js"></script>
+    <!-- <script src="lib/opacity/Control.Opacity.js"></script> -->
     <script src="js/Autolinker.min.js"></script>
     <script src="js/rbush.min.js"></script>
     <script src="js/labelgun.min.js"></script>
@@ -314,7 +317,7 @@
             } else {
               highlightLayer.setStyle({
                 fillColor: '#fffac8',
-                fillOpacity: 1
+                fillOpacity: 0.5
               });
             }
             highlightLayer.openPopup();
@@ -356,21 +359,6 @@
 			}
 		}
     // Removed the 'Herostones of United Bengaluru District' title control above the zoom control
-        var abstract = new L.Control({'position':'bottomright'});
-        abstract.onAdd = function (map) {
-            this._div = L.DomUtil.create('div',
-            'leaflet-control abstract');
-            this._div.id = 'abstract'
-
-                abstract.show();
-                return this._div;
-            };
-            abstract.show = function () {
-                this._div.classList.remove("abstract");
-                this._div.classList.add("abstractUncollapsed");
-                this._div.innerHTML = 'The Mythic Society Bengaluru Inscriptions Digital Conservation Project';
-        };
-        abstract.addTo(map);
         var zoomControl = L.control.zoom({
             position: 'topright'
         }).addTo(map);
@@ -427,7 +415,7 @@
                 lineJoin: 'miter',
                 weight: 1.0, 
                 fill: true,
-                fillOpacity: 1,
+                fillOpacity: 0.5,
                 fillColor: 'rgba(178,223,138,0.34901960784313724)',
                 interactive: false,
             }
@@ -483,7 +471,7 @@
                 lineJoin: 'miter',
                 weight: 1.0, 
                 fill: true,
-                fillOpacity: 1,
+                fillOpacity: 0.5,
                 fillColor: 'rgba(166,206,227,0.28627450980392155)',
                 interactive: false,
             }
@@ -539,7 +527,7 @@
                 lineJoin: 'miter',
                 weight: 1.0, 
                 fill: true,
-                fillOpacity: 1,
+                fillOpacity: 0.5,
                 fillColor: 'rgba(141,90,153,0.2627450980392157)',
                 interactive: false,
             }
@@ -595,7 +583,7 @@
                 lineJoin: 'miter',
                 weight: 1.0, 
                 fill: true,
-                fillOpacity: 1,
+                fillOpacity: 0.5,
                 fillColor: 'rgba(255,216,177,0.5)',
                 interactive: false,
             }
@@ -677,19 +665,66 @@
 			layer.bindPopup(content, { maxHeight: 400 });
         }
 
-        function style_HeroStonesofUnitedBengaluruDistrict_5_0() {
+        // Color palette for Type of Herostone (add more as needed)
+        var herostoneTypeColors = {
+            'Aatma Balidana (Self Sacrifice) Herostone': '#e57373',
+            'Beeragallu (Kuruba)': '#ba68c8',
+            'Broken Herostone': '#ffd54f',
+            'Handibete (Boar)': '#4fc3f7',
+            'Havubete (Snake)': '#81c784',
+            'Herostone': '#f06292',
+            'Hulibete (Tiger)': '#ffb74d',
+            'Hulibete and Turugol (Tiger and Cattle)': '#a1887f',
+            'Hulibete and Veera Masti (Tiger and Veeera Masti)': '#90a4ae',
+            'Ikkaimasti': '#9575cd',
+            'Jinke Bete (Deer)': '#aed581',
+            'Kote Kalaga': '#7986cb',
+            'Mahasati stone': '#ff8a65',
+            'Mukkaimasti': '#dce775',
+            'Nishadi': '#4db6ac',
+            'Okkai': '#fbc02d',
+            'Rifle Herostone ': '#b0bec5',
+            'Sati  ': '#f44336',
+            'Skirmish': '#64b5f6',
+            'Skirmish and Veera Masti': '#e1bee7',
+            'Skirmish with Robbers': '#ffb300',
+            'Turugol (Cattle)': '#388e3c',
+            'Unclear Cause Herostone': '#bdbdbd',
+            'Uralivu': '#ff7043',
+            'Uralivu and Turugol': '#8d6e63',
+            'Vanara (Monkey) Memorial': '#aeea00',
+            'Veera Masti': '#00bcd4',
+            'Veera Masti and (Hulibete ?)': '#cddc39',
+            'Veera Masti and Turugol': '#ff4081',
+            'Velevali': '#1976d2'
+        };
+        function style_HeroStonesofUnitedBengaluruDistrict_5_0(feature) {
+            // Check if any Type of Herostone filter is selected
+            var typeSel = document.getElementById('sel_TypeofHerostone');
+            var anyTypeSelected = false;
+            if (typeSel) {
+                for (var i = 0; i < typeSel.options.length; i++) {
+                    if (typeSel.options[i].selected && typeSel.options[i].value) {
+                        anyTypeSelected = true;
+                        break;
+                    }
+                }
+            }
+            var type = feature && feature.properties && feature.properties['Type of Herostone'];
+            // Indigo-violet blend
+            var color = (anyTypeSelected && herostoneTypeColors[type]) ? herostoneTypeColors[type] : 'url(#indigoVioletGradient)';
             return {
                 pane: 'pane_HeroStonesofUnitedBengaluruDistrict_5',
                 radius: 5.5,
                 opacity: 1,
-                color: 'rgba(35,35,35,1.0)',
+                color: '#6c3fd3',
                 dashArray: '',
                 lineCap: 'butt',
                 lineJoin: 'miter',
                 weight: 1,
                 fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(61,119,201,0.8666666666666667)',
+                fillOpacity: 0.5,
+                fillColor: color,
                 interactive: true,
             }
         }
@@ -697,7 +732,33 @@
         map.getPane('pane_HeroStonesofUnitedBengaluruDistrict_5').style.zIndex = 405;
         map.getPane('pane_HeroStonesofUnitedBengaluruDistrict_5').style['mix-blend-mode'] = 'normal';
         // --- MarkerClusterGroup for Herostones ---
-        var markerClusterGroup = L.markerClusterGroup();
+        // Add SVG gradient for indigo-violet blend
+        if (!document.getElementById('indigoVioletGradientDef')) {
+            var svgNS = 'http://www.w3.org/2000/svg';
+            var svg = document.createElementNS(svgNS, 'svg');
+            svg.setAttribute('width', 0);
+            svg.setAttribute('height', 0);
+            svg.innerHTML = `
+                <defs>
+                    <linearGradient id="indigoVioletGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#3f51b5"/>
+                        <stop offset="100%" stop-color="#8f00ff"/>
+                    </linearGradient>
+                </defs>
+            `;
+            svg.id = 'indigoVioletGradientDef';
+            document.body.appendChild(svg);
+        }
+        var markerClusterGroup = L.markerClusterGroup({
+            iconCreateFunction: function(cluster) {
+                // Use a CSS linear-gradient for the cluster background
+                return L.divIcon({
+                    html: '<div style="background:linear-gradient(135deg,#3f51b5 0%,#8f00ff 100%);color:#fff;border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:14px;box-shadow:0 2px 8px rgba(0,0,0,0.10);">' + cluster.getChildCount() + '</div>',
+                    className: 'custom-cluster',
+                    iconSize: [32, 32]
+                });
+            }
+        });
         var layer_HeroStonesofUnitedBengaluruDistrict_5 = new L.geoJson(json_HeroStonesofUnitedBengaluruDistrict_5, {
             attribution: '',
             interactive: true,
@@ -713,9 +774,14 @@
                 return L.circleMarker(latlng, style_HeroStonesofUnitedBengaluruDistrict_5_0(feature));
             },
         });
-        markerClusterGroup.addLayer(layer_HeroStonesofUnitedBengaluruDistrict_5);
-        bounds_group.addLayer(markerClusterGroup);
-        map.addLayer(markerClusterGroup);
+    markerClusterGroup.addLayer(layer_HeroStonesofUnitedBengaluruDistrict_5);
+    bounds_group.addLayer(markerClusterGroup);
+    map.addLayer(markerClusterGroup);
+    // Remove district shape layers from map by default
+    if (map.hasLayer(layer_MandyaDistrict_4)) map.removeLayer(layer_MandyaDistrict_4);
+    if (map.hasLayer(layer_BengaluruUrbanDistrict_3)) map.removeLayer(layer_BengaluruUrbanDistrict_3);
+    if (map.hasLayer(layer_BengaluruRuralDistrict_2)) map.removeLayer(layer_BengaluruRuralDistrict_2);
+    if (map.hasLayer(layer_RamanagaraDistrict_1)) map.removeLayer(layer_RamanagaraDistrict_1);
         const url = {"Nominatim": "https://nominatim.openstreetmap.org/search?format=geojson&addressdetails=1&",
         "BAN": "https://api-adresse.data.gouv.fr/search/?"}
         var photonControl = L.control.photon({
@@ -770,25 +836,301 @@
             }
         });
         var overlaysTree = [
-            {label: '<img src="legend/HeroStonesofUnitedBengaluruDistrict_5.png" /> HeroStones of United Bengaluru District', layer: layer_HeroStonesofUnitedBengaluruDistrict_5},
+            {label: '<img src="legend/HeroStonesofUnitedBengaluruDistrict_5.png" /> HeroStones of United Bengaluru District <span style="color:#b00;font-size:0.95em;font-style:italic;">(locked)</span>', layer: layer_HeroStonesofUnitedBengaluruDistrict_5, disabled: true, nocheck: true},
             {label: '<img src="legend/MandyaDistrict_4.png" /> Mandya District', layer: layer_MandyaDistrict_4},
             {label: '<img src="legend/BengaluruUrbanDistrict_3.png" /> Bengaluru Urban District', layer: layer_BengaluruUrbanDistrict_3},
             {label: '<img src="legend/BengaluruRuralDistrict_2.png" /> Bengaluru Rural District', layer: layer_BengaluruRuralDistrict_2},
             {label: '<img src="legend/RamanagaraDistrict_1.png" /> Ramanagara District', layer: layer_RamanagaraDistrict_1},
             {label: "OSM Standard", layer: layer_OSMStandard_0},]
         var lay = L.control.layers.tree(null, overlaysTree,{
-            //namedToggle: true,
-            //selectorBack: false,
-            //closedSymbol: '&#8862; &#x1f5c0;',
-            //openedSymbol: '&#8863; &#x1f5c1;',
-            //collapseAll: 'Collapse all',
-            //expandAll: 'Expand all',
             collapsed: true,
             position: 'topright'
         });
         lay.addTo(map);
-        setBounds();
+        // Disable the checkbox for the locked layer and prevent toggling its visibility
+        setTimeout(function() {
+            var controls = document.querySelectorAll('.leaflet-control-layers-overlays input[type="checkbox"]');
+            var labels = document.querySelectorAll('.leaflet-control-layers-overlays label');
+            for (var i = 0; i < labels.length; i++) {
+                if (labels[i].innerHTML.includes('HeroStones of United Bengaluru District')) {
+                    controls[i].disabled = true;
+                    controls[i].checked = true;
+                    controls[i].parentNode.style.opacity = 0.6;
+                    // Remove click event to prevent toggling
+                    controls[i].onclick = function(e) { e.preventDefault(); return false; };
+                }
+            }
+        }, 500);
+        // Prevent programmatic toggling as well
+        map.on('overlayadd overlayremove', function(e) {
+            if (e.layer === layer_HeroStonesofUnitedBengaluruDistrict_5) {
+                if (!map.hasLayer(layer_HeroStonesofUnitedBengaluruDistrict_5)) {
+                    map.addLayer(layer_HeroStonesofUnitedBengaluruDistrict_5);
+                }
+            }
+        });
+
+
+    // --- Clustering ON/OFF Toggle Switch for HeroStones Layer ---
+    var herostonesPlainMode = false; // clustering enabled by default
+    var herostonesFilteredLayer = null;
+    // Add switch styles
+    var style = document.createElement('style');
+    style.innerHTML = `
+    .switch-toggle-wrap {
+        display: flex;
+        align-items: center;
+        margin: 0 0 10px 0;
+        padding: 10px 12px 0 12px;
+        font-family: 'Segoe UI', 'Arial', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        font-size: 1em;
+    }
+    .switch-label {
+        font-weight: bold;
+        color: maroon;
+        margin-right: 12px;
+        font-size: 1em;
+        letter-spacing: 0.2px;
+        font-family: 'Segoe UI', 'Arial', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 2.3em;
+        height: 1.2em;
+        margin-right: 10px;
+        vertical-align: middle;
+    }
+    .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+    .slider-switch {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: #ccc;
+        transition: .3s;
+        border-radius: 1.2em;
+    }
+    .slider-switch:before {
+        position: absolute;
+        content: "";
+        height: 0.9em;
+        width: 0.9em;
+        left: 0.15em;
+        bottom: 0.15em;
+        background: #fff;
+        transition: .3s;
+        border-radius: 50%;
+        box-shadow: 0 2px 6px rgba(128,0,0,0.10);
+    }
+    input:checked + .slider-switch {
+        background: maroon;
+    }
+    input:checked + .slider-switch:before {
+        transform: translateX(1.1em);
+    }
+    #cluster-toggle-status {
+        font-weight: 600;
+        margin-left: 12px;
+        color: #800000;
+        font-size: 1em;
+        font-family: 'Segoe UI', 'Arial', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
+    `;
+    document.head.appendChild(style);
+
+    // Insert the toggle switch above the slider bar filter section
+    function insertClusterSwitch() {
+        var menu = document.getElementById('menu');
+        if (!menu) return;
+        var wrap = document.createElement('div');
+        wrap.className = 'switch-toggle-wrap';
+        wrap.innerHTML = `
+            <span class="switch-label">Clustering</span>
+            <label class="switch">
+                <input type="checkbox" id="cluster-toggle-checkbox" checked>
+                <span class="slider-switch"></span>
+            </label>
+            <span id="cluster-toggle-status">ON</span>
+        `;
+        // Insert above the slider bar title (period-century-label)
+        var periodLabel = menu.querySelector('.period-century-label');
+        if (periodLabel) {
+            menu.insertBefore(wrap, periodLabel);
+        } else {
+            menu.insertBefore(wrap, menu.firstChild);
+        }
+        // Add event
+        var checkbox = document.getElementById('cluster-toggle-checkbox');
+        var status = document.getElementById('cluster-toggle-status');
+        checkbox.onchange = function() {
+            herostonesPlainMode = !checkbox.checked;
+            updateClusteringState();
+            status.textContent = checkbox.checked ? 'ON' : 'OFF';
+        };
+    }
+    // Call after DOMContentLoaded to ensure #menu exists
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', insertClusterSwitch);
+    } else {
+        insertClusterSwitch();
+    }
+
+    function updateClusteringState() {
+        var checkbox = document.getElementById('cluster-toggle-checkbox');
+        var status = document.getElementById('cluster-toggle-status');
+        if (herostonesPlainMode) {
+            if (map.hasLayer(markerClusterGroup)) map.removeLayer(markerClusterGroup);
+            if (herostonesFilteredLayer && map.hasLayer(herostonesFilteredLayer)) map.removeLayer(herostonesFilteredLayer);
+            if (map.hasLayer(layer_HeroStonesofUnitedBengaluruDistrict_5)) map.removeLayer(layer_HeroStonesofUnitedBengaluruDistrict_5);
+            if (herostonesFilteredLayer) {
+                map.addLayer(herostonesFilteredLayer);
+            } else {
+                map.addLayer(layer_HeroStonesofUnitedBengaluruDistrict_5);
+            }
+            if (status) status.textContent = 'OFF';
+            if (checkbox) checkbox.checked = false;
+        } else {
+            if (herostonesFilteredLayer && map.hasLayer(herostonesFilteredLayer)) map.removeLayer(herostonesFilteredLayer);
+            if (map.hasLayer(layer_HeroStonesofUnitedBengaluruDistrict_5)) map.removeLayer(layer_HeroStonesofUnitedBengaluruDistrict_5);
+            if (!map.hasLayer(markerClusterGroup)) map.addLayer(markerClusterGroup);
+            if (status) status.textContent = 'ON';
+            if (checkbox) checkbox.checked = true;
+        }
+    }
+
+    // Ensure filterFunc respects clustering state
+    var originalFilterFunc = filterFunc;
+    filterFunc = function() {
+        if (typeof markerClusterGroup !== 'undefined' && typeof layer_HeroStonesofUnitedBengaluruDistrict_5 !== 'undefined') {
+            markerClusterGroup.clearLayers();
+            if (map.hasLayer(layer_HeroStonesofUnitedBengaluruDistrict_5)) map.removeLayer(layer_HeroStonesofUnitedBengaluruDistrict_5);
+            if (herostonesFilteredLayer && map.hasLayer(herostonesFilteredLayer)) map.removeLayer(herostonesFilteredLayer);
+            var features = json_HeroStonesofUnitedBengaluruDistrict_5.features.slice(0);
+            try {
+                for (key in Filters) {
+                    keyS = key.replace(/[^a-zA-Z0-9_]/g, "");
+                    if (Filters[key] == "str" || Filters[key] == "bool") {
+                        var selection = [];
+                        var options = document.getElementById("sel_" + keyS).options;
+                        for (var i = 0; i < options.length; i++) {
+                            if (options[i].selected) selection.push(options[i].value);
+                        }
+                        try {
+                            if (key in features[0].properties) {
+                                for (i = features.length - 1; i >= 0; --i) {
+                                    if (selection.indexOf(features[i].properties[key]) < 0 && selection.length > 0) {
+                                        features.splice(i, 1);
+                                    }
+                                }
+                            }
+                        } catch (err) {}
+                    }
+                    if (Filters[key] == "int") {
+                        sliderVals = document.getElementById("div_" + keyS).noUiSlider.get();
+                        try {
+                            if (key in features[0].properties) {
+                                for (i = features.length - 1; i >= 0; --i) {
+                                    if (parseInt(features[i].properties[key]) < sliderVals[0] || parseInt(features[i].properties[key]) > sliderVals[1]) {
+                                        features.splice(i, 1);
+                                    }
+                                }
+                            }
+                        } catch (err) {}
+                    }
+                    if (Filters[key] == "real") {
+                        sliderVals = document.getElementById("div_" + keyS).noUiSlider.get();
+                        try {
+                            if (key in features[0].properties) {
+                                for (i = features.length - 1; i >= 0; --i) {
+                                    if (features[i].properties[key] < sliderVals[0] || features[i].properties[key] > sliderVals[1]) {
+                                        features.splice(i, 1);
+                                    }
+                                }
+                            }
+                        } catch (err) {}
+                    }
+                    if (Filters[key] == "date" || Filters[key] == "datetime" || Filters[key] == "time") {
+                        try {
+                            if (key in features[0].properties) {
+                                HTMLkey = key.replace(/[&\/\\#,+()$~%.'":*?<>{} ]/g, '');
+                                startdate = document.getElementById("dat_" + HTMLkey + "_date1").value.replace(" ", "T");
+                                enddate = document.getElementById("dat_" + HTMLkey + "_date2").value.replace(" ", "T");
+                                for (i = features.length - 1; i >= 0; --i) {
+                                    if (features[i].properties[key] < startdate || features[i].properties[key] > enddate) {
+                                        features.splice(i, 1);
+                                    }
+                                }
+                            }
+                        } catch (err) {}
+                    }
+                }
+            } catch (err) {}
+            var filteredLayer = new L.geoJson({type: 'FeatureCollection', features: features}, {
+                attribution: '',
+                interactive: true,
+                dataVar: 'json_HeroStonesofUnitedBengaluruDistrict_5',
+                layerName: 'layer_HeroStonesofUnitedBengaluruDistrict_5',
+                pane: 'pane_HeroStonesofUnitedBengaluruDistrict_5',
+                onEachFeature: pop_HeroStonesofUnitedBengaluruDistrict_5,
+                pointToLayer: function (feature, latlng) {
+                    var context = {
+                        feature: feature,
+                        variables: {}
+                    };
+                    return L.circleMarker(latlng, style_HeroStonesofUnitedBengaluruDistrict_5_0(feature));
+                },
+            });
+            herostonesFilteredLayer = filteredLayer;
+            if (herostonesPlainMode) {
+                if (map.hasLayer(markerClusterGroup)) map.removeLayer(markerClusterGroup);
+                map.addLayer(filteredLayer);
+            } else {
+                if (map.hasLayer(filteredLayer)) map.removeLayer(filteredLayer);
+                markerClusterGroup.addLayer(filteredLayer);
+                if (!map.hasLayer(markerClusterGroup)) map.addLayer(markerClusterGroup);
+            }
+        }
+        // ...existing code for other layers...
+    };
+    // Opacity slider removed
+    setBounds();
     // No sidebar DOM construction needed, handled in HTML above
+
+        // --- Clustering toggle for HeroStones of United Bengaluru District ---
+        function isLayerOnMap(layer) {
+            return layer && map.hasLayer(layer);
+        }
+        map.on('overlayadd', function(e) {
+                if (e.layer === layer_HeroStonesofUnitedBengaluruDistrict_5) {
+                    // Remove cluster group from map if present
+                    if (map.hasLayer(markerClusterGroup)) {
+                        map.removeLayer(markerClusterGroup);
+                    }
+                    // Add plain layer if not already
+                    if (!isLayerOnMap(layer_HeroStonesofUnitedBengaluruDistrict_5)) {
+                        map.addLayer(layer_HeroStonesofUnitedBengaluruDistrict_5);
+                    }
+                }
+        });
+        map.on('overlayremove', function(e) {
+                if (e.layer === layer_HeroStonesofUnitedBengaluruDistrict_5) {
+                    // Remove plain layer if present
+                    if (isLayerOnMap(layer_HeroStonesofUnitedBengaluruDistrict_5)) {
+                        map.removeLayer(layer_HeroStonesofUnitedBengaluruDistrict_5);
+                    }
+                    // Add cluster group back to map if not present
+                    if (!map.hasLayer(markerClusterGroup)) {
+                        map.addLayer(markerClusterGroup);
+                    }
+                }
+        });
 
                 // Sidebar toggle button logic (button outside sidebar, always visible)
                 var sidebarBtn = document.getElementById('sidebar-toggle');
@@ -905,16 +1247,9 @@
             var lab_PeriodCentury = document.createElement('div');
             lab_PeriodCentury.innerHTML  = 'Period (Century): <span id="val_PeriodCentury"></span>';
             lab_PeriodCentury.className = 'filterlabel period-century-label';
+            lab_PeriodCentury.style.position = 'relative';
             document.getElementById("menu").appendChild(lab_PeriodCentury);
             document.getElementById("menu").appendChild(div_PeriodCentury);
-            var reset_PeriodCentury = document.createElement('button');
-            reset_PeriodCentury.type = 'button';
-            reset_PeriodCentury.textContent = 'Clear Filter';
-            reset_PeriodCentury.className = 'clear-filter-btn';
-            reset_PeriodCentury.onclick = function() {
-                sel_PeriodCentury.noUiSlider.reset();
-            };
-            document.getElementById("menu").appendChild(reset_PeriodCentury);
             var sel_PeriodCentury = document.getElementById('div_PeriodCentury');
             noUiSlider.create(sel_PeriodCentury, {
                 connect: true,
@@ -954,29 +1289,14 @@
             var lab_WithorWithoutInscription = document.createElement('div');
             lab_WithorWithoutInscription.innerHTML = 'With or Without Inscription';
             lab_WithorWithoutInscription.className = 'filterlabel';
+            lab_WithorWithoutInscription.style.position = 'relative';
             div_WithorWithoutInscription.appendChild(lab_WithorWithoutInscription);
             div_WithorWithoutInscription.appendChild(sel_WithorWithoutInscription);
-            var reset_WithorWithoutInscription = document.createElement('button');
-            reset_WithorWithoutInscription.type = 'button';
-            reset_WithorWithoutInscription.textContent = 'Clear Filter';
-            reset_WithorWithoutInscription.className = 'clear-filter-btn';
-            reset_WithorWithoutInscription.onclick = function() {
-                var select = document.getElementById("sel_WithorWithoutInscription");
-                var options = select.options;
-                for (var i=0; i < options.length; i++) {
-                    options[i].selected = false;
-                }
-                // Reset custom dropdown UI
-                var wrapper = select.parentNode.querySelector('.ms-dropdown-wrapper');
-                if (wrapper) {
-                    var checkboxes = wrapper.querySelectorAll('input[type=checkbox]');
-                    checkboxes.forEach(function(cb) { cb.checked = false; });
-                    var btn = wrapper.querySelector('.ms-dropdown-btn');
-                    if (btn) btn.textContent = 'Select...';
-                }
-                filterFunc();
-            };
-            div_WithorWithoutInscription.appendChild(reset_WithorWithoutInscription);
+                // Chip container for With or Without Inscription
+                var chipContainer_WithorWithoutInscription = document.createElement('div');
+                chipContainer_WithorWithoutInscription.className = 'chip-container';
+                chipContainer_WithorWithoutInscription.id = 'chips_WithorWithoutInscription';
+                div_WithorWithoutInscription.appendChild(chipContainer_WithorWithoutInscription);
             document.getElementById("menu").appendChild(
                 document.createElement("div"));
             // Multi-select dropdown with checkboxes will be applied by multiselect-dropdown.js
@@ -998,28 +1318,14 @@
             var lab_District = document.createElement('div');
             lab_District.innerHTML = 'District';
             lab_District.className = 'filterlabel';
+            lab_District.style.position = 'relative';
             div_District.appendChild(lab_District);
             div_District.appendChild(sel_District);
-            var reset_District = document.createElement('button');
-            reset_District.type = 'button';
-            reset_District.textContent = 'Clear Filter';
-            reset_District.className = 'clear-filter-btn';
-            reset_District.onclick = function() {
-                var select = document.getElementById("sel_District");
-                var options = select.options;
-                for (var i=0; i < options.length; i++) {
-                    options[i].selected = false;
-                }
-                var wrapper = select.parentNode.querySelector('.ms-dropdown-wrapper');
-                if (wrapper) {
-                    var checkboxes = wrapper.querySelectorAll('input[type=checkbox]');
-                    checkboxes.forEach(function(cb) { cb.checked = false; });
-                    var btn = wrapper.querySelector('.ms-dropdown-btn');
-                    if (btn) btn.textContent = 'Select...';
-                }
-                filterFunc();
-            };
-            div_District.appendChild(reset_District);
+                // Chip container for District
+                var chipContainer_District = document.createElement('div');
+                chipContainer_District.className = 'chip-container';
+                chipContainer_District.id = 'chips_District';
+                div_District.appendChild(chipContainer_District);
             document.getElementById("menu").appendChild(
                 document.createElement("div"));
             // Multi-select dropdown with checkboxes will be applied by multiselect-dropdown.js
@@ -1066,28 +1372,14 @@
             var lab_TypeofHerostone = document.createElement('div');
             lab_TypeofHerostone.innerHTML = 'Type of Herostone';
             lab_TypeofHerostone.className = 'filterlabel';
+            lab_TypeofHerostone.style.position = 'relative';
             div_TypeofHerostone.appendChild(lab_TypeofHerostone);
             div_TypeofHerostone.appendChild(sel_TypeofHerostone);
-            var reset_TypeofHerostone = document.createElement('button');
-            reset_TypeofHerostone.type = 'button';
-            reset_TypeofHerostone.textContent = 'Clear Filter';
-            reset_TypeofHerostone.className = 'clear-filter-btn';
-            reset_TypeofHerostone.onclick = function() {
-                var select = document.getElementById("sel_TypeofHerostone");
-                var options = select.options;
-                for (var i=0; i < options.length; i++) {
-                    options[i].selected = false;
-                }
-                var wrapper = select.parentNode.querySelector('.ms-dropdown-wrapper');
-                if (wrapper) {
-                    var checkboxes = wrapper.querySelectorAll('input[type=checkbox]');
-                    checkboxes.forEach(function(cb) { cb.checked = false; });
-                    var btn = wrapper.querySelector('.ms-dropdown-btn');
-                    if (btn) btn.textContent = 'Select...';
-                }
-                filterFunc();
-            };
-            div_TypeofHerostone.appendChild(reset_TypeofHerostone);
+                // Chip container for Type of Herostone
+                var chipContainer_TypeofHerostone = document.createElement('div');
+                chipContainer_TypeofHerostone.className = 'chip-container';
+                chipContainer_TypeofHerostone.id = 'chips_TypeofHerostone';
+                div_TypeofHerostone.appendChild(chipContainer_TypeofHerostone);
             document.getElementById("menu").appendChild(
                 document.createElement("div"));
             // Multi-select dropdown with checkboxes will be applied by multiselect-dropdown.js
@@ -1112,28 +1404,14 @@
             var lab_ConservationStatus = document.createElement('div');
             lab_ConservationStatus.innerHTML = 'Conservation Status';
             lab_ConservationStatus.className = 'filterlabel';
+            lab_ConservationStatus.style.position = 'relative';
             div_ConservationStatus.appendChild(lab_ConservationStatus);
             div_ConservationStatus.appendChild(sel_ConservationStatus);
-            var reset_ConservationStatus = document.createElement('button');
-            reset_ConservationStatus.type = 'button';
-            reset_ConservationStatus.textContent = 'Clear Filter';
-            reset_ConservationStatus.className = 'clear-filter-btn';
-            reset_ConservationStatus.onclick = function() {
-                var select = document.getElementById("sel_ConservationStatus");
-                var options = select.options;
-                for (var i=0; i < options.length; i++) {
-                    options[i].selected = false;
-                }
-                var wrapper = select.parentNode.querySelector('.ms-dropdown-wrapper');
-                if (wrapper) {
-                    var checkboxes = wrapper.querySelectorAll('input[type=checkbox]');
-                    checkboxes.forEach(function(cb) { cb.checked = false; });
-                    var btn = wrapper.querySelector('.ms-dropdown-btn');
-                    if (btn) btn.textContent = 'Select...';
-                }
-                filterFunc();
-            };
-            div_ConservationStatus.appendChild(reset_ConservationStatus);
+                // Chip container for Conservation Status
+                var chipContainer_ConservationStatus = document.createElement('div');
+                chipContainer_ConservationStatus.className = 'chip-container';
+                chipContainer_ConservationStatus.id = 'chips_ConservationStatus';
+                div_ConservationStatus.appendChild(chipContainer_ConservationStatus);
             document.getElementById("menu").appendChild(
                 document.createElement("div"));
             // Multi-select dropdown with checkboxes will be applied by multiselect-dropdown.js
@@ -1155,30 +1433,67 @@
             var lab_ScriptoftheInscription = document.createElement('div');
             lab_ScriptoftheInscription.innerHTML = 'Script of the Inscription';
             lab_ScriptoftheInscription.className = 'filterlabel';
+            lab_ScriptoftheInscription.style.position = 'relative';
             div_ScriptoftheInscription.appendChild(lab_ScriptoftheInscription);
             div_ScriptoftheInscription.appendChild(sel_ScriptoftheInscription);
-            var reset_ScriptoftheInscription = document.createElement('button');
-            reset_ScriptoftheInscription.type = 'button';
-            reset_ScriptoftheInscription.textContent = 'Clear Filter';
-            reset_ScriptoftheInscription.className = 'clear-filter-btn';
-            reset_ScriptoftheInscription.onclick = function() {
-                var select = document.getElementById("sel_ScriptoftheInscription");
-                var options = select.options;
-                for (var i=0; i < options.length; i++) {
-                    options[i].selected = false;
+                // Chip container for Script of the Inscription
+                var chipContainer_ScriptoftheInscription = document.createElement('div');
+                chipContainer_ScriptoftheInscription.className = 'chip-container';
+                chipContainer_ScriptoftheInscription.id = 'chips_ScriptoftheInscription';
+                div_ScriptoftheInscription.appendChild(chipContainer_ScriptoftheInscription);
+            // Add a single common Clear Filters button below all filters
+            var clearAllBtn = document.createElement('button');
+            clearAllBtn.type = 'button';
+            clearAllBtn.textContent = 'Clear Filters';
+            clearAllBtn.className = 'clear-filter-btn clear-all';
+            // Remove all inline styles so CSS takes effect
+            clearAllBtn.removeAttribute('style');
+            clearAllBtn.onclick = function() {
+                // Reset slider
+                if (window.sel_PeriodCentury && window.sel_PeriodCentury.noUiSlider) {
+                    window.sel_PeriodCentury.noUiSlider.reset();
                 }
-                var wrapper = select.parentNode.querySelector('.ms-dropdown-wrapper');
-                if (wrapper) {
-                    var checkboxes = wrapper.querySelectorAll('input[type=checkbox]');
-                    checkboxes.forEach(function(cb) { cb.checked = false; });
-                    var btn = wrapper.querySelector('.ms-dropdown-btn');
-                    if (btn) btn.textContent = 'Select...';
-                }
+                // Reset all selects
+                var selectIds = [
+                    'sel_WithorWithoutInscription',
+                    'sel_District',
+                    'sel_TypeofHerostone',
+                    'sel_ConservationStatus',
+                    'sel_ScriptoftheInscription'
+                ];
+                selectIds.forEach(function(id) {
+                    var select = document.getElementById(id);
+                    if (select) {
+                        Array.from(select.options).forEach(function(opt) { opt.selected = false; });
+                        // Reset custom dropdown UI
+                        var wrapper = select.parentNode.querySelector('.ms-dropdown-wrapper');
+                        if (wrapper) {
+                            var checkboxes = wrapper.querySelectorAll('input[type=checkbox]');
+                            checkboxes.forEach(function(cb) { cb.checked = false; });
+                            var btn = wrapper.querySelector('.ms-dropdown-btn');
+                            if (btn) btn.textContent = 'Select...';
+                        }
+                    }
+                });
+                // Update chips
+                if (typeof enableChipFilters === 'function') enableChipFilters();
                 filterFunc();
             };
-            div_ScriptoftheInscription.appendChild(reset_ScriptoftheInscription);
+            document.getElementById("menu").appendChild(clearAllBtn);
             // Multi-select dropdown will be applied by multiselect-dropdown.js
+                // Chip functionality moved to custom.js
     </script>
     <script src="js/multiselect-dropdown.js"></script>
-    </body>
+    <script src="https://unpkg.com/leaflet-omnivore@0.3.4/leaflet-omnivore.min.js"></script>
+    <script src="js/kml-upload.js"></script>
+    <script src="js/custom.js"></script>
+        <!-- Credit Section -->
+        <div id="credit-section" style="position:fixed;right:12px;bottom:8px;height:16px;line-height:16px;font-size:12px;background:rgba(255,255,255,0.85);padding:0 10px;border-radius:8px;box-shadow:0 1px 4px rgba(0,0,0,0.08);z-index:3002;pointer-events:auto;">
+            Credits: 
+            <a href="https://leafletjs.com" target="_blank" rel="noopener" style="color:#800000;text-decoration:none;">Leaflet</a> |
+            <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener" style="color:#800000;text-decoration:none;">OpenStreetMap</a> |
+            <a href="https://qgis.org" target="_blank" rel="noopener" style="color:#800000;text-decoration:none;">QGIS</a> |
+            <a href="https://github.com/tomchadwin/qgis2web" target="_blank" rel="noopener" style="color:#800000;text-decoration:none;">qgis2web</a>
+        </div>
+        </body>
 </html>

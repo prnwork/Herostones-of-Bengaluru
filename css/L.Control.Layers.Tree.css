@@ -1,3 +1,19 @@
+.leaflet-control-layers-toggle,
+.leaflet-control-layers-toggle.leaflet-layerstree-named-toggle {
+    width: 26px !important;
+    height: 26px !important;
+    min-width: 26px !important;
+    min-height: 26px !important;
+    max-width: 26px !important;
+    max-height: 26px !important;
+    box-sizing: border-box !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 !important;
+    border-radius: 4px !important;
+    margin: 2px 5px !important;
+}
 .leaflet-control-layers-toggle.leaflet-layerstree-named-toggle {
     margin: 2px 5px;
     width: auto;

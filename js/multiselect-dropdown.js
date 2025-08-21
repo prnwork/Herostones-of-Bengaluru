@@ -59,6 +59,17 @@ function multiSelectDropdown(selectElement) {
             }
             updateButtonText();
             if (typeof selectElement.onchange === 'function') selectElement.onchange();
+            // Update chips if chip container exists
+            var chipMap = {
+                'sel_WithorWithoutInscription': 'chips_WithorWithoutInscription',
+                'sel_District': 'chips_District',
+                'sel_TypeofHerostone': 'chips_TypeofHerostone',
+                'sel_ConservationStatus': 'chips_ConservationStatus',
+                'sel_ScriptoftheInscription': 'chips_ScriptoftheInscription'
+            };
+            if (chipMap[selectElement.id] && typeof updateChips === 'function') {
+                updateChips(selectElement.id, chipMap[selectElement.id]);
+            }
         };
         item.appendChild(checkbox);
         var textSpan = document.createElement('span');
@@ -81,13 +92,7 @@ function multiSelectDropdown(selectElement) {
     selectElement.parentNode.insertBefore(wrapper, selectElement);
     // Update button text
     function updateButtonText() {
-        var selected = [];
-        for (var i = 0; i < selectElement.options.length; i++) {
-            if (selectElement.options[i].selected && selectElement.options[i].value) {
-                selected.push(selectElement.options[i].text);
-            }
-        }
-        button.textContent = selected.length ? selected.join(', ') : 'Select...';
+        button.textContent = 'Select...';
     }
     updateButtonText();
 }
