@@ -1,3 +1,94 @@
+    <style>
+    #boundary-select-container {
+        position: absolute;
+        left: 16px;
+        bottom: 16px;
+        background: rgba(255,255,255,0.97);
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+        padding: 10px 16px 10px 12px;
+        z-index: 3002;
+        min-width: 180px;
+        font-size: 1em;
+        display: none;
+    }
+    #boundary-select-container label {
+        display: flex;
+        align-items: center;
+        margin-bottom: 4px;
+        font-size: 0.98em;
+        cursor: pointer;
+    }
+    #boundary-select-container input[type=checkbox] {
+        margin-right: 8px;
+    }
+    #boundary-select-title {
+        font-weight: bold;
+        margin-bottom: 6px;
+        color: #1976d2;
+    }
+    </style>
+    <div id="boundary-select-container" style="display:none">
+        <div id="boundary-select-title">Select Boundaries</div>
+        <div id="boundary-checkbox-list"></div>
+    </div>
+
+    <script>
+    // --- Boundary Multi-Select UI ---
+    function showBoundarySelect(boundaryGeoJSON) {
+        var container = document.getElementById('boundary-select-container');
+        var list = document.getElementById('boundary-checkbox-list');
+        list.innerHTML = '';
+        if (!boundaryGeoJSON || !boundaryGeoJSON.features || boundaryGeoJSON.features.length === 0) {
+            container.style.display = 'none';
+            return;
+        }
+        boundaryGeoJSON.features.forEach(function(f, idx) {
+            var label = document.createElement('label');
+            var cb = document.createElement('input');
+            cb.type = 'checkbox';
+            cb.value = idx;
+            cb.checked = true;
+            label.appendChild(cb);
+            // Try to use a meaningful name from properties
+            var nameFields = ['name', 'NAME', 'Name', 'id', 'ID', 'Id', 'desc', 'description', 'label', 'LABEL'];
+            var name = null;
+            if (f.properties) {
+                for (var i = 0; i < nameFields.length; i++) {
+                    if (f.properties[nameFields[i]]) {
+                        name = f.properties[nameFields[i]];
+                        break;
+                    }
+                }
+            }
+            if (!name) name = 'Boundary ' + (idx+1);
+            label.appendChild(document.createTextNode(' ' + name));
+            list.appendChild(label);
+        });
+        container.style.display = 'block';
+    }
+    function getSelectedBoundaryIndexes() {
+        var list = document.getElementById('boundary-checkbox-list');
+        if (!list) return [];
+        var cbs = list.querySelectorAll('input[type=checkbox]');
+        var idxs = [];
+        cbs.forEach(function(cb) { if (cb.checked) idxs.push(parseInt(cb.value)); });
+        return idxs;
+    }
+    // Show/hide boundary select UI on upload
+    document.addEventListener('kml-upload-success', function(e) {
+        if (e.detail && e.detail.layer) {
+            var geojson = e.detail.layer.toGeoJSON();
+            showBoundarySelect(geojson);
+        }
+    });
+    document.addEventListener('geojson-upload-success', function(e) {
+        if (e.detail && e.detail.layer) {
+            var geojson = e.detail.layer.toGeoJSON();
+            showBoundarySelect(geojson);
+        }
+    });
+    </script>
 <!doctype html>
 <html lang="en">
     <head>
@@ -20,6 +111,18 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
     <style>
+    /* Remove blinking text cursor (caret) from all non-input UI elements */
+    #map, #sidebar-container, #sidebar-inner, #menu, .leaflet-container, .leaflet-control, .leaflet-pane, .leaflet-marker-icon, .leaflet-popup, .leaflet-control-attribution, .leaflet-control-zoom, .leaflet-control-layers, .leaflet-control-photon, .signposts, .custom-cluster, .chip-container, .clear-filter-btn, .ms-dropdown-btn, .filterselect select, .sidebar-fab, .sidebar-fab-text, .navbar, .navbar-logo, .navbar-right, .project-title, .map-title {
+        cursor: default !important;
+        caret-color: transparent !important;
+        user-select: none;
+    }
+    /* Allow caret and text selection only for input, textarea, and contenteditable */
+    input, textarea, [contenteditable="true"] {
+        cursor: text !important;
+        caret-color: auto !important;
+        user-select: text;
+    }
         /* Sidebar toggle button with interactive arrow */
         #sidebar-toggle {
             position: absolute;
@@ -826,6 +929,83 @@
 
         // Ajouter le bouton à l'élément parent
         search.insertBefore(button, search.firstChild);
+        // Add 'Show Points Within Boundary' button next to upload button
+        // Remove any existing 'Clip' button to avoid duplicates
+        var oldBtn = document.querySelector('.boundary-filter-btn');
+        if (oldBtn && oldBtn.parentNode) oldBtn.parentNode.removeChild(oldBtn);
+        var uploadBtn = document.querySelector('.kml-upload-btn, .geojson-upload-btn, input[type="file"]');
+        var boundaryBtn = document.createElement('button');
+        boundaryBtn.textContent = 'Clip';
+        boundaryBtn.className = 'boundary-filter-btn';
+        boundaryBtn.style.marginLeft = '8px';
+        boundaryBtn.style.padding = '4px 10px';
+        boundaryBtn.style.fontWeight = 'bold';
+        boundaryBtn.style.background = '#1976d2';
+        boundaryBtn.style.color = '#fff';
+        boundaryBtn.style.border = 'none';
+        boundaryBtn.style.borderRadius = '4px';
+        boundaryBtn.style.cursor = 'pointer';
+        var fileInput = document.querySelector('input[type="file"]');
+        if (fileInput && fileInput.parentNode) {
+            fileInput.parentNode.insertBefore(boundaryBtn, fileInput.nextSibling);
+        } else if (uploadBtn && uploadBtn.parentNode) {
+            uploadBtn.parentNode.insertBefore(boundaryBtn, uploadBtn.nextSibling);
+        } else {
+            // Fallback: append to menu if upload button not found
+            var menu = document.getElementById('menu');
+            if (menu) menu.appendChild(boundaryBtn);
+        }
+
+        // Store uploaded boundary geometry globally
+        window.uploadedBoundary = null;
+        // Listen for KML/GeoJSON upload and store boundary
+        document.addEventListener('kml-upload-success', function(e) {
+            if (e.detail && e.detail.layer) {
+                var geojson = e.detail.layer.toGeoJSON();
+                window.uploadedBoundary = geojson;
+            }
+        });
+        document.addEventListener('geojson-upload-success', function(e) {
+            if (e.detail && e.detail.layer) {
+                var geojson = e.detail.layer.toGeoJSON();
+                window.uploadedBoundary = geojson;
+            }
+        });
+
+        // Patch filterFunc to respect uploaded boundary
+        if (typeof filterFunc === 'function') {
+            var originalFilterFunc = filterFunc;
+            filterFunc = function() {
+                var boundary = window.uploadedBoundary;
+                if (boundary && boundary.features && boundary.features.length > 0) {
+                    var poly = boundary.features[0];
+                    var allFeatures = json_HeroStonesofUnitedBengaluruDistrict_5.features.slice(0);
+                    var filtered = [];
+                    for (var i = 0; i < allFeatures.length; i++) {
+                        var pt = turf.point(allFeatures[i].geometry.coordinates);
+                        if (turf.booleanPointInPolygon(pt, poly)) {
+                            filtered.push(allFeatures[i]);
+                        }
+                    }
+                    // Replace features with only those inside boundary
+                    json_HeroStonesofUnitedBengaluruDistrict_5.features = filtered;
+                    originalFilterFunc();
+                    // Restore all features for next filter
+                    json_HeroStonesofUnitedBengaluruDistrict_5.features = allFeatures;
+                } else {
+                    originalFilterFunc();
+                }
+            }
+        }
+
+        // Button click: filter points to within uploaded boundary
+        boundaryBtn.onclick = function() {
+            if (!window.uploadedBoundary) {
+                alert('Please upload a boundary file first.');
+                return;
+            }
+            filterFunc();
+        };
         last = search.lastChild;
         last.style.display = "none";
         button.addEventListener("click", function (e) {
@@ -835,40 +1015,21 @@
                 last.style.display = "none";
             }
         });
+
+        // Only show district and OSM layers in the overlaysTree (remove Herostones layer from control)
         var overlaysTree = [
-            {label: '<img src="legend/HeroStonesofUnitedBengaluruDistrict_5.png" /> HeroStones of United Bengaluru District <span style="color:#b00;font-size:0.95em;font-style:italic;">(locked)</span>', layer: layer_HeroStonesofUnitedBengaluruDistrict_5, disabled: true, nocheck: true},
             {label: '<img src="legend/MandyaDistrict_4.png" /> Mandya District', layer: layer_MandyaDistrict_4},
             {label: '<img src="legend/BengaluruUrbanDistrict_3.png" /> Bengaluru Urban District', layer: layer_BengaluruUrbanDistrict_3},
             {label: '<img src="legend/BengaluruRuralDistrict_2.png" /> Bengaluru Rural District', layer: layer_BengaluruRuralDistrict_2},
             {label: '<img src="legend/RamanagaraDistrict_1.png" /> Ramanagara District', layer: layer_RamanagaraDistrict_1},
-            {label: "OSM Standard", layer: layer_OSMStandard_0},]
+            {label: "OSM Standard", layer: layer_OSMStandard_0},
+        ];
         var lay = L.control.layers.tree(null, overlaysTree,{
             collapsed: true,
             position: 'topright'
         });
         lay.addTo(map);
-        // Disable the checkbox for the locked layer and prevent toggling its visibility
-        setTimeout(function() {
-            var controls = document.querySelectorAll('.leaflet-control-layers-overlays input[type="checkbox"]');
-            var labels = document.querySelectorAll('.leaflet-control-layers-overlays label');
-            for (var i = 0; i < labels.length; i++) {
-                if (labels[i].innerHTML.includes('HeroStones of United Bengaluru District')) {
-                    controls[i].disabled = true;
-                    controls[i].checked = true;
-                    controls[i].parentNode.style.opacity = 0.6;
-                    // Remove click event to prevent toggling
-                    controls[i].onclick = function(e) { e.preventDefault(); return false; };
-                }
-            }
-        }, 500);
-        // Prevent programmatic toggling as well
-        map.on('overlayadd overlayremove', function(e) {
-            if (e.layer === layer_HeroStonesofUnitedBengaluruDistrict_5) {
-                if (!map.hasLayer(layer_HeroStonesofUnitedBengaluruDistrict_5)) {
-                    map.addLayer(layer_HeroStonesofUnitedBengaluruDistrict_5);
-                }
-            }
-        });
+        // Herostones layer is always visible and cannot be toggled in the UI
 
 
     // --- Clustering ON/OFF Toggle Switch for HeroStones Layer ---
@@ -1107,30 +1268,7 @@
         function isLayerOnMap(layer) {
             return layer && map.hasLayer(layer);
         }
-        map.on('overlayadd', function(e) {
-                if (e.layer === layer_HeroStonesofUnitedBengaluruDistrict_5) {
-                    // Remove cluster group from map if present
-                    if (map.hasLayer(markerClusterGroup)) {
-                        map.removeLayer(markerClusterGroup);
-                    }
-                    // Add plain layer if not already
-                    if (!isLayerOnMap(layer_HeroStonesofUnitedBengaluruDistrict_5)) {
-                        map.addLayer(layer_HeroStonesofUnitedBengaluruDistrict_5);
-                    }
-                }
-        });
-        map.on('overlayremove', function(e) {
-                if (e.layer === layer_HeroStonesofUnitedBengaluruDistrict_5) {
-                    // Remove plain layer if present
-                    if (isLayerOnMap(layer_HeroStonesofUnitedBengaluruDistrict_5)) {
-                        map.removeLayer(layer_HeroStonesofUnitedBengaluruDistrict_5);
-                    }
-                    // Add cluster group back to map if not present
-                    if (!map.hasLayer(markerClusterGroup)) {
-                        map.addLayer(markerClusterGroup);
-                    }
-                }
-        });
+
 
                 // Sidebar toggle button logic (button outside sidebar, always visible)
                 var sidebarBtn = document.getElementById('sidebar-toggle');
@@ -1446,14 +1584,11 @@
             clearAllBtn.type = 'button';
             clearAllBtn.textContent = 'Clear Filters';
             clearAllBtn.className = 'clear-filter-btn clear-all';
-            // Remove all inline styles so CSS takes effect
             clearAllBtn.removeAttribute('style');
             clearAllBtn.onclick = function() {
-                // Reset slider
                 if (window.sel_PeriodCentury && window.sel_PeriodCentury.noUiSlider) {
                     window.sel_PeriodCentury.noUiSlider.reset();
                 }
-                // Reset all selects
                 var selectIds = [
                     'sel_WithorWithoutInscription',
                     'sel_District',
@@ -1465,7 +1600,6 @@
                     var select = document.getElementById(id);
                     if (select) {
                         Array.from(select.options).forEach(function(opt) { opt.selected = false; });
-                        // Reset custom dropdown UI
                         var wrapper = select.parentNode.querySelector('.ms-dropdown-wrapper');
                         if (wrapper) {
                             var checkboxes = wrapper.querySelectorAll('input[type=checkbox]');
@@ -1475,25 +1609,77 @@
                         }
                     }
                 });
-                // Update chips
                 if (typeof enableChipFilters === 'function') enableChipFilters();
                 filterFunc();
             };
             document.getElementById("menu").appendChild(clearAllBtn);
+
+            // Add 'Show Points Within Boundary' button below upload button in filter menu
+            // Remove duplicate boundary button from filter menu. The 'Clip' button is now only beside the upload button.
+
+            // Store uploaded boundary geometry globally
+            window.uploadedBoundary = null;
+            document.addEventListener('kml-upload-success', function(e) {
+                if (e.detail && e.detail.layer) {
+                    var geojson = e.detail.layer.toGeoJSON();
+                    window.uploadedBoundary = geojson;
+                }
+            });
+            document.addEventListener('geojson-upload-success', function(e) {
+                if (e.detail && e.detail.layer) {
+                    var geojson = e.detail.layer.toGeoJSON();
+                    window.uploadedBoundary = geojson;
+                }
+            });
+
+            // Patch filterFunc to respect uploaded boundary
+            if (typeof filterFunc === 'function') {
+                var originalFilterFunc = filterFunc;
+                filterFunc = function() {
+                    var boundary = window.uploadedBoundary;
+                    if (boundary && boundary.features && boundary.features.length > 0) {
+                        var selectedIdxs = getSelectedBoundaryIndexes();
+                        if (selectedIdxs.length === 0) {
+                            originalFilterFunc();
+                            return;
+                        }
+                        var polys = selectedIdxs.map(function(idx) { return boundary.features[idx]; });
+                        var allFeatures = json_HeroStonesofUnitedBengaluruDistrict_5.features.slice(0);
+                        var filtered = [];
+                        for (var i = 0; i < allFeatures.length; i++) {
+                            var pt = turf.point(allFeatures[i].geometry.coordinates);
+                            for (var j = 0; j < polys.length; j++) {
+                                if (turf.booleanPointInPolygon(pt, polys[j])) {
+                                    filtered.push(allFeatures[i]);
+                                    break;
+                                }
+                            }
+                        }
+                        json_HeroStonesofUnitedBengaluruDistrict_5.features = filtered;
+                        originalFilterFunc();
+                        json_HeroStonesofUnitedBengaluruDistrict_5.features = allFeatures;
+                    } else {
+                        originalFilterFunc();
+                    }
+                }
+            }
+
+            boundaryBtn.onclick = function() {
+                if (!window.uploadedBoundary) {
+                    alert('Please upload a boundary file first.');
+                    return;
+                }
+                filterFunc();
+            };
             // Multi-select dropdown will be applied by multiselect-dropdown.js
                 // Chip functionality moved to custom.js
     </script>
     <script src="js/multiselect-dropdown.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@turf/turf@6/turf.min.js"></script>
     <script src="https://unpkg.com/leaflet-omnivore@0.3.4/leaflet-omnivore.min.js"></script>
     <script src="js/kml-upload.js"></script>
     <script src="js/custom.js"></script>
         <!-- Credit Section -->
-        <div id="credit-section" style="position:fixed;right:12px;bottom:8px;height:16px;line-height:16px;font-size:12px;background:rgba(255,255,255,0.85);padding:0 10px;border-radius:8px;box-shadow:0 1px 4px rgba(0,0,0,0.08);z-index:3002;pointer-events:auto;">
-            Credits: 
-            <a href="https://leafletjs.com" target="_blank" rel="noopener" style="color:#800000;text-decoration:none;">Leaflet</a> |
-            <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener" style="color:#800000;text-decoration:none;">OpenStreetMap</a> |
-            <a href="https://qgis.org" target="_blank" rel="noopener" style="color:#800000;text-decoration:none;">QGIS</a> |
-            <a href="https://github.com/tomchadwin/qgis2web" target="_blank" rel="noopener" style="color:#800000;text-decoration:none;">qgis2web</a>
-        </div>
+
         </body>
 </html>

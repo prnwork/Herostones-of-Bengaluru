@@ -73,6 +73,9 @@
                     map.getPane('pane_KMLUpload').style.zIndex = 350;
                 }
                 kmlLayer.addTo(map);
+                // Dispatch custom event for boundary filter integration
+                var event = new CustomEvent('kml-upload-success', { detail: { layer: kmlLayer } });
+                document.dispatchEvent(event);
             };
             reader.readAsText(file);
         });
